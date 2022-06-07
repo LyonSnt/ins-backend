@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Sexo extends Model
 {
     use HasFactory;
-    public $timestamps = false;
+   /*  public $timestamps = false; */
     protected $table = 'tblsexo';
 
     public $fillable = [
-        'sex_descripcion'
+        'sex_descripcion',
+        'sex_abreviatura'
     ];
 
     /**
@@ -22,6 +23,8 @@ class Sexo extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'sex_descripcion' => 'string'
+        'sex_descripcion' => 'string',
+        'sex_abreviatura' => 'string',
+
     ];
 }

@@ -15,5 +15,6 @@ class PruebaSeeder extends Seeder
     public function run()
     {
      //Prueba::factory(5)->create();
+     //php artisan db:seed --class=PruebaSeeder
     }
 }

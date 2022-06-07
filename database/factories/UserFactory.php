@@ -14,13 +14,23 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'name' => 'Admin',
+         return [
+            'name' => 'Leonel Santacruz',
             'email' => 'a@a.com',
             'email_verified_at' => now(),
             'password' => bcrypt('a'),
+            'rol' => 'Administrador',
             'remember_token' => Str::random(10),
         ];
+
+        /* return [
+            'name' => 'Juan Males',
+            'email' => 'j@j.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('j'),
+            'rol' => 'Profesor',
+            'remember_token' => Str::random(10),
+        ]; */
     }
 
  /*    return [

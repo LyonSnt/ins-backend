@@ -23,7 +23,6 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
         try {
             if (!JWTAuth::attempt($credentials)) {
                 $response['status'] = 0;
@@ -42,10 +41,14 @@ class UserController extends Controller
         $data['token'] = auth()->claims([
             'name' => $user->name, //ESTA PARTE ES PARA QUE SE VICUALISE EN ANGULAR LOS DATOS DE LA TABLA
             'email' => $user->email,
+            'id' => $user->id,
+            'password' => $user->password,
+            'rol' => $user->rol,
         ])->attempt($credentials);
         $response['data'] = $data;
         $response['status'] = 1;
         $response['code'] = 200;
+        $response['rol'] = 3;
 
         $response['message'] = 'Login correcto';
         return response()->json($response);

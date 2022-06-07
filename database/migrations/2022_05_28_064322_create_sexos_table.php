@@ -15,7 +15,8 @@ class CreateSexosTable extends Migration
     {
         Schema::create('tblsexo', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('sex_descripcion');
+            $table->enum('sex_descripcion', ['MASCULINO', 'FEMENINO']);
+            $table->enum('sex_abreviatura',['H', 'M']);
             $table->timestamps();
         });
     }

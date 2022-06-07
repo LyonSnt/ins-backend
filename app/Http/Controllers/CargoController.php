@@ -16,6 +16,7 @@ class CargoController extends Controller
     public function index()
     {
         //
+        
     }
 
     /**

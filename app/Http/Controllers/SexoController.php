@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Sexo;
 use App\Http\Requests\StoreSexoRequest;
 use App\Http\Requests\UpdateSexoRequest;
-use Illuminate\Http\Request;
 
 class SexoController extends Controller
 {
@@ -25,12 +24,14 @@ class SexoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(StoreSexoRequest $request)
     {
         //
 
-    $crear = Sexo::create($request->all());
-    return response()->json($crear, status: 200);
+        $crear = Sexo::create($request->all());
+        return response()->json($crear, status: 200);
+/*         return response()->json(['message' => "Creado Correctamente",'success' => true,$crear], status: 200);
+ */
     }
 
     /**
@@ -79,14 +80,14 @@ class SexoController extends Controller
     {
         //
         $sexo = Sexo::find($id);
-        if(is_null($sexo)){
+        if (is_null($sexo)) {
             return response()->json(['message' => 'Nose encuentra el registro'], status: 404);
         }
         $sexo->update($request->all());
-      //  return response($sexo, status: 200);
-        return response()->json(['message' => "Actualizado Correctamente",'success' => true,$sexo], status: 200);
+        //  return response($sexo, status: 200);
+        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $sexo], status: 200);
 
-    /*     $prueba3['sex_descripcion'] = $request['sex_descripcion'];
+        /*     $prueba3['sex_descripcion'] = $request['sex_descripcion'];
         Sexo::find($id)->update($prueba3);
         return response()->json([
             'message' => "Successfully updated",
@@ -105,6 +106,8 @@ class SexoController extends Controller
         //
         $eliminar = Sexo::find($id);
         $eliminar->delete();
-        return response()->json(null, status: 204);
+       // return response()->json(null, status: 204);
+        return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
+
     }
 }
