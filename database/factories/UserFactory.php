@@ -14,23 +14,38 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-         return [
-            'name' => 'Leonel Santacruz',
+       /*    return [
+            'name' => 'Leonel',
             'email' => 'a@a.com',
             'email_verified_at' => now(),
             'password' => bcrypt('a'),
-            'rol' => 'Administrador',
-            'remember_token' => Str::random(10),
-        ];
-
-        /* return [
-            'name' => 'Juan Males',
-            'email' => 'j@j.com',
-            'email_verified_at' => now(),
-            'password' => bcrypt('j'),
-            'rol' => 'Profesor',
+            'id_rol' => 'Administrador',
+            'est_id' => null,
+            'pro_id' => 1,
             'remember_token' => Str::random(10),
         ]; */
+
+      /*     return [
+            'name' => 'Cinthia',
+            'email' => 'c@c.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('c'),
+            'id_rol' => 'Profesor',
+            'est_id' => null,
+            'pro_id' => 2,
+            'remember_token' => Str::random(10),
+        ]; */
+
+        return [
+            'name' => 'Marco',
+            'email' => 'm@m.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('m'),
+            'id_rol' => 'Estudiante',
+            'est_id' => 1,
+            'pro_id' => null,
+            'remember_token' => Str::random(10),
+        ];
     }
 
  /*    return [

@@ -15,7 +15,7 @@ class CreateEstadocivilsTable extends Migration
     {
         Schema::create('tblestadocivil', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('esc_decripcion', ['CASADO/A', 'SOLTERO/A', 'VIUDO/A', 'DIVORCIADO/A']);
+            $table->enum('esc_descripcion', ['CASADO/A', 'SOLTERO/A', 'VIUDO/A', 'DIVORCIADO/A']);
             $table->enum('esc_abreviatura',['C', 'S', 'V', 'D']);
             $table->timestamps();
         });

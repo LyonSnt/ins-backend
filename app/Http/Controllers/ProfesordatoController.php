@@ -15,7 +15,12 @@ class ProfesordatoController extends Controller
      */
     public function index()
     {
-        //
+        $listar = Profesordato::get();
+        return response()->json([
+            'res' => true,
+            'msg' => 'Dato encontrado correctamnte',
+            'data' => $listar
+        ], status: 200);
     }
 
     /**
@@ -45,9 +50,14 @@ class ProfesordatoController extends Controller
      * @param  \App\Models\Profesordato  $profesordato
      * @return \Illuminate\Http\Response
      */
-    public function show(Profesordato $profesordato)
+    public function show(Profesordato $profesordato, $id)
     {
-        //
+        $buscarPorId = Profesordato::find($id);
+        return response()->json([
+            'res' => true,
+            'msg' => 'Dato encontrado correctamnte',
+            'datoDesdeLaravel' => $buscarPorId
+        ], 200);
     }
 
     /**

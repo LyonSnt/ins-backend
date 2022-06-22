@@ -15,8 +15,9 @@ class CargoController extends Controller
      */
     public function index()
     {
-        //
-        
+        $listar = Cargo::get();
+        return response()->json($listar, status: 200);
+
     }
 
     /**
@@ -37,7 +38,9 @@ class CargoController extends Controller
      */
     public function store(StoreCargoRequest $request)
     {
-        //
+
+        $crear = Cargo::create($request->all());
+        return response()->json($crear, status: 200);
     }
 
     /**
@@ -46,9 +49,11 @@ class CargoController extends Controller
      * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function show(Cargo $cargo)
+    public function show(Cargo $cargo, $id)
     {
         //
+        $buscar = Cargo::find($id);
+        return response()->json($buscar, status: 200);
     }
 
     /**
@@ -69,9 +74,18 @@ class CargoController extends Controller
      * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCargoRequest $request, Cargo $cargo)
+    public function update(UpdateCargoRequest $request, Cargo $cargo, $id)
     {
         //
+
+        $cargo = Cargo::find($id);
+        if (is_null($cargo)) {
+            return response()->json(['message' => 'Nose encuentra el registro'], status: 404);
+        }
+        $cargo->update($request->all());
+        //  return response($sexo, status: 200);
+        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $cargo], status: 200);
+
     }
 
     /**
@@ -80,8 +94,12 @@ class CargoController extends Controller
      * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cargo $cargo)
+    public function destroy(Cargo $cargo,$id)
     {
-        //
+        $eliminar = Cargo::find($id);
+        $eliminar->delete();
+       // return response()->json(null, status: 204);
+        return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
+
     }
 }

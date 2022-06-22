@@ -9,10 +9,10 @@ class Estadocivil extends Model
 {
     use HasFactory;
 
-    protected $table = 'tblestadocivl';
+    protected $table = 'tblestadocivil';
 
     public $fillable = [
-        'esc_decripcion',
+        'esc_descripcion',
         'esc_abreviatura'
     ];
 
@@ -23,7 +23,7 @@ class Estadocivil extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'esc_decripcion' => 'string',
+        'esc_descripcion' => 'string',
         'esc_abreviatura' => 'string',
 
     ];

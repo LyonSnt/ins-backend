@@ -15,7 +15,8 @@ class MesController extends Controller
      */
     public function index()
     {
-        //
+        $listar = Mes::get();
+        return response()->json($listar, status: 200);
     }
 
     /**
@@ -36,7 +37,8 @@ class MesController extends Controller
      */
     public function store(StoreMesRequest $request)
     {
-        //
+        $crear = Mes::create($request->all());
+        return response()->json($crear, status: 200);
     }
 
     /**
@@ -45,9 +47,10 @@ class MesController extends Controller
      * @param  \App\Models\Mes  $mes
      * @return \Illuminate\Http\Response
      */
-    public function show(Mes $mes)
+    public function show(Mes $mes, $id)
     {
-        //
+        $buscar = Mes::find($id);
+        return response()->json($buscar, status: 200);
     }
 
     /**
@@ -68,9 +71,17 @@ class MesController extends Controller
      * @param  \App\Models\Mes  $mes
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMesRequest $request, Mes $mes)
+    public function update(UpdateMesRequest $request, Mes $mes, $id)
     {
-        //
+        $actualizar = Mes::find($id);
+        if (is_null($actualizar)) {
+            return response()->json(['message' => 'No se encuentra el registro'], status: 404);
+        }
+        $actualizar->update($request->all());
+        //  return response($sexo, status: 200);
+        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $actualizar], status: 200);
+
+
     }
 
     /**
@@ -79,8 +90,12 @@ class MesController extends Controller
      * @param  \App\Models\Mes  $mes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Mes $mes)
+    public function destroy(Mes $mes, $id)
     {
-        //
+        $eliminar = Mes::find($id);
+        $eliminar->delete();
+       // return response()->json(null, status: 204);
+       return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
+
     }
 }

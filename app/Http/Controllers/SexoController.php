@@ -28,10 +28,7 @@ class SexoController extends Controller
     {
         //
 
-        $crear = Sexo::create($request->all());
-        return response()->json($crear, status: 200);
-/*         return response()->json(['message' => "Creado Correctamente",'success' => true,$crear], status: 200);
- */
+
     }
 
     /**
@@ -42,7 +39,10 @@ class SexoController extends Controller
      */
     public function store(StoreSexoRequest $request)
     {
-        //
+        $crear = Sexo::create($request->all());
+        return response()->json($crear, status: 200);
+        /*         return response()->json(['message' => "Creado Correctamente",'success' => true,$crear], status: 200);
+         */
     }
 
     /**
@@ -106,8 +106,7 @@ class SexoController extends Controller
         //
         $eliminar = Sexo::find($id);
         $eliminar->delete();
-       // return response()->json(null, status: 204);
-        return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
-
+        // return response()->json(null, status: 204);
+        return response()->json(['message' => "Eliminado Correctamente", 'success' => true, $eliminar], status: 204);
     }
 }

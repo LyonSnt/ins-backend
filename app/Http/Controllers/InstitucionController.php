@@ -15,7 +15,8 @@ class InstitucionController extends Controller
      */
     public function index()
     {
-        //
+        $listar = Institucion::get();
+        return response()->json($listar, status: 200);
     }
 
     /**
@@ -36,7 +37,8 @@ class InstitucionController extends Controller
      */
     public function store(StoreInstitucionRequest $request)
     {
-        //
+        $crear = Institucion::create($request->all());
+        return response()->json($crear, status: 200);
     }
 
     /**
@@ -45,9 +47,10 @@ class InstitucionController extends Controller
      * @param  \App\Models\Institucion  $institucion
      * @return \Illuminate\Http\Response
      */
-    public function show(Institucion $institucion)
+    public function show(Institucion $institucion, $id)
     {
-        //
+        $buscar = Institucion::find($id);
+        return response()->json($buscar, status: 200);
     }
 
     /**
@@ -68,9 +71,16 @@ class InstitucionController extends Controller
      * @param  \App\Models\Institucion  $institucion
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInstitucionRequest $request, Institucion $institucion)
+    public function update(UpdateInstitucionRequest $request, Institucion $institucion, $id)
     {
-        //
+        $actualizar = Institucion::find($id);
+        if (is_null($actualizar)) {
+            return response()->json(['message' => 'No se encuentra el registro'], status: 404);
+        }
+        $actualizar->update($request->all());
+        //  return response($sexo, status: 200);
+        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $actualizar], status: 200);
+
     }
 
     /**
@@ -79,8 +89,12 @@ class InstitucionController extends Controller
      * @param  \App\Models\Institucion  $institucion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Institucion $institucion)
+    public function destroy(Institucion $institucion, $id)
     {
-        //
+        $eliminar = Institucion::find($id);
+        $eliminar->delete();
+       // return response()->json(null, status: 204);
+       return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
+
     }
 }

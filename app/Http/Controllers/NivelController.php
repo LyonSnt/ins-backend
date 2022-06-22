@@ -15,7 +15,8 @@ class NivelController extends Controller
      */
     public function index()
     {
-        //
+        $listar = Nivel::get();
+        return response()->json($listar, status: 200);
     }
 
     /**
@@ -36,7 +37,8 @@ class NivelController extends Controller
      */
     public function store(StoreNivelRequest $request)
     {
-        //
+        $crear = Nivel::create($request->all());
+        return response()->json($crear, status: 200);
     }
 
     /**
@@ -45,9 +47,10 @@ class NivelController extends Controller
      * @param  \App\Models\Nivel  $nivel
      * @return \Illuminate\Http\Response
      */
-    public function show(Nivel $nivel)
+    public function show(Nivel $nivel, $id)
     {
-        //
+        $buscar = Nivel::find($id);
+        return response()->json($buscar, status: 200);
     }
 
     /**
@@ -68,9 +71,16 @@ class NivelController extends Controller
      * @param  \App\Models\Nivel  $nivel
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateNivelRequest $request, Nivel $nivel)
+    public function update(UpdateNivelRequest $request, Nivel $nivel, $id)
     {
-        //
+        $actualizar = Nivel::find($id);
+        if (is_null($actualizar)) {
+            return response()->json(['message' => 'No se encuentra el registro'], status: 404);
+        }
+        $actualizar->update($request->all());
+        //  return response($sexo, status: 200);
+        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $actualizar], status: 200);
+
     }
 
     /**
@@ -79,8 +89,12 @@ class NivelController extends Controller
      * @param  \App\Models\Nivel  $nivel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Nivel $nivel)
+    public function destroy(Nivel $nivel, $id)
     {
-        //
+        $eliminar = Nivel::find($id);
+        $eliminar->delete();
+       // return response()->json(null, status: 204);
+        return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
+
     }
 }

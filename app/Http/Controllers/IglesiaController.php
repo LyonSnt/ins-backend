@@ -15,7 +15,8 @@ class IglesiaController extends Controller
      */
     public function index()
     {
-        //
+        $listar = Iglesia::get();
+        return response()->json($listar, status: 200);
     }
 
     /**
@@ -36,7 +37,8 @@ class IglesiaController extends Controller
      */
     public function store(StoreIglesiaRequest $request)
     {
-        //
+        $crear = Iglesia::create($request->all());
+        return response()->json($crear, status: 200);
     }
 
     /**
@@ -45,9 +47,10 @@ class IglesiaController extends Controller
      * @param  \App\Models\Iglesia  $iglesia
      * @return \Illuminate\Http\Response
      */
-    public function show(Iglesia $iglesia)
+    public function show(Iglesia $iglesia, $id)
     {
-        //
+        $buscar = Iglesia::find($id);
+        return response()->json($buscar, status: 200);
     }
 
     /**
@@ -68,9 +71,16 @@ class IglesiaController extends Controller
      * @param  \App\Models\Iglesia  $iglesia
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateIglesiaRequest $request, Iglesia $iglesia)
+    public function update(UpdateIglesiaRequest $request, Iglesia $iglesia, $id)
     {
-        //
+        $actualizar = Iglesia::find($id);
+        if (is_null($actualizar)) {
+            return response()->json(['message' => 'No se encuentra el registro'], status: 404);
+        }
+        $actualizar->update($request->all());
+        //  return response($sexo, status: 200);
+        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $actualizar], status: 200);
+
     }
 
     /**
@@ -79,8 +89,12 @@ class IglesiaController extends Controller
      * @param  \App\Models\Iglesia  $iglesia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Iglesia $iglesia)
+    public function destroy(Iglesia $iglesia, $id)
     {
-        //
+        $eliminar = Iglesia::find($id);
+        $eliminar->delete();
+       // return response()->json(null, status: 204);
+       return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
+
     }
 }
