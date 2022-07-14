@@ -15,13 +15,28 @@ class ProfesordatoController extends Controller
      */
     public function index()
     {
-        $listar = Profesordato::get();
+        /* $listar = Profesordato::get();
         return response()->json([
             'res' => true,
             'msg' => 'Dato encontrado correctamnte',
             'data' => $listar
-        ], status: 200);
+        ], status: 200); */
+
+        $buscar = Profesordato::where('sex_id', 1)
+            ->orderBy('pro_apellido')->get();
+        return response()->json($buscar, status: 200);
     }
+
+    public function profesorm()
+    {
+        $buscar = Profesordato::where('sex_id', 2)
+            ->orderBy('pro_apellido')->get();
+        return response()->json($buscar, status: 200);
+    }
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -58,6 +73,12 @@ class ProfesordatoController extends Controller
             'msg' => 'Dato encontrado correctamnte',
             'datoDesdeLaravel' => $buscarPorId
         ], 200);
+    }
+
+    public function show2(Profesordato $profesordato, $id)
+    {
+        $buscar = Profesordato::find($id);
+        return response()->json($buscar, status: 200);
     }
 
     /**

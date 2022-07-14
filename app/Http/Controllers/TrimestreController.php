@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Trimestre;
 use App\Http\Requests\StoreTrimestreRequest;
 use App\Http\Requests\UpdateTrimestreRequest;
+use Illuminate\Http\Request;
 
 class TrimestreController extends Controller
 {
@@ -16,6 +17,13 @@ class TrimestreController extends Controller
     public function index()
     {
         $listar = Trimestre::get();
+        return response()->json($listar, status: 200);
+    }
+
+    public function trimestrem()
+    {
+
+        $listar = Trimestre::whereIn('id', [1, 2, 3])->get();
         return response()->json($listar, status: 200);
     }
 
@@ -53,6 +61,8 @@ class TrimestreController extends Controller
         return response()->json($buscar, status: 200);
     }
 
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -80,7 +90,6 @@ class TrimestreController extends Controller
         $actualizar->update($request->all());
         //  return response($sexo, status: 200);
         return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $actualizar], status: 200);
-
     }
 
     /**
@@ -93,8 +102,7 @@ class TrimestreController extends Controller
     {
         $eliminar = Trimestre::find($id);
         $eliminar->delete();
-       // return response()->json(null, status: 204);
-        return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
-
+        // return response()->json(null, status: 204);
+        return response()->json(['message' => "Eliminado Correctamente", 'success' => true, $eliminar], status: 204);
     }
 }

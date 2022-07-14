@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
          /*    $table->integer('id_rol'); */
-            $table->enum("id_rol", ["Administrador", "Profesor", "Estudiante"]);// <-- Aquí el enum
+            $table->enum("id_rol", ["Administrador", "Administrador2", "Profesor", "Estudiante"]);// <-- Aquí el enum
 
             $table->unsignedInteger('est_id')->nullable();
             $table->foreign('est_id', 'fk_tblestudiante_tblusers')->references('id')->on('tblestudiante')->onDelete('cascade')->onUpdate('restrict');

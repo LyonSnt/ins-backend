@@ -45,4 +45,34 @@ class Estudiante extends Model
         'est_imagen' => 'string'
     ];
 
+    public static function searchH($query = '')
+    {
+        if (!$query) {
+            return self::where('sex_id', 1)->get();
+            // return self::select('est_cedula', 'est_apellido')->get();
+        } else {
+            return self::where('est_nombre', 'ILIKE', '%' . $query . '%')
+                ->orWhere('est_apellido', 'ILIKE', '%' . $query . '%')
+                ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')
+                ->get()->where('sex_id', 1);
+        }
+    }
+
+
+    public static function searchM($query = '')
+    {
+        if (!$query) {
+            return self::where('sex_id', 2)->get();
+        } else {
+            return self::where('est_nombre', 'ILIKE', '%' . $query . '%')
+                ->orWhere('est_apellido', 'ILIKE', '%' . $query . '%')
+                ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')
+                ->get()->where('sex_id', 2);
+        }
+    }
+
+    public function scopeWomen($query)
+    {
+        return $query->whereSex_abreviatura('H');
+    }
 }

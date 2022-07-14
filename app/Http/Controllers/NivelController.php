@@ -51,7 +51,10 @@ class NivelController extends Controller
     {
         $buscar = Nivel::find($id);
         return response()->json($buscar, status: 200);
+
     }
+
+  
 
     /**
      * Show the form for editing the specified resource.

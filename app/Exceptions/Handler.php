@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -66,16 +67,23 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof ModelNotFoundException) {
-           return response()->json([
-            'res' => false, 'error' => 'Error modelo no encontrado'
-           ], 400);
+            return response()->json([
+                'res' => false, 'error' => 'Error modelo no encontrado'
+            ], 400);
         }
 
         if ($exception instanceof RouteNotFoundException) {
             return response()->json([
-             'res' => false, 'error' => 'No tiene permiso para acceder a esta ruta'
+                'res' => false, 'error' => 'No tiene permiso para acceder a esta ruta'
             ], 401);
-         }
+        }
+        if ($exception instanceof RelationNotFoundException) {
+            return response()->json([
+                'res' => false, 'error' => 'Algo pasa con la relacion'
+            ], 401);
+        }
+
+
         return parent::render($request, $exception);
     }
 }

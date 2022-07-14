@@ -25,27 +25,38 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
         ]; */
 
-      /*     return [
+       /*  return [
             'name' => 'Cinthia',
             'email' => 'c@c.com',
             'email_verified_at' => now(),
             'password' => bcrypt('c'),
-            'id_rol' => 'Profesor',
+            'id_rol' => 'Administrador2',
             'est_id' => null,
             'pro_id' => 2,
             'remember_token' => Str::random(10),
         ]; */
 
-        return [
-            'name' => 'Marco',
-            'email' => 'm@m.com',
+          return [
+            'name' => 'Alberto',
+            'email' => 'al@al.com',
             'email_verified_at' => now(),
-            'password' => bcrypt('m'),
+            'password' => bcrypt('al'),
+            'id_rol' => 'Profesor',
+            'est_id' => null,
+            'pro_id' => 3,
+            'remember_token' => Str::random(10),
+        ];
+
+      /*    return [
+            'name' => 'LUIS',
+            'email' => 'l@l.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('l'),
             'id_rol' => 'Estudiante',
             'est_id' => 1,
             'pro_id' => null,
             'remember_token' => Str::random(10),
-        ];
+        ]; */
     }
 
  /*    return [

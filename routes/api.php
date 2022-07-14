@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnioacademicoController;
+use App\Http\Controllers\AsignaturaController;
 use App\Http\Controllers\AulaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CargoController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\EstadocivilController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\IglesiaController;
 use App\Http\Controllers\InstitucionController;
+use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\MesController;
 use App\Http\Controllers\NivelController;
 use App\Http\Controllers\ProfesordatoController;
@@ -58,6 +60,10 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('registro', [UserController::class, 'registro']);
 Route::post('acceso', [UserController::class, 'acceso']);
 
+Route::get('show', [UserController::class, 'show']);
+Route::get('index', [UserController::class, 'index']);
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('cerrarsesion', [UserController::class, 'cerrarSesion']);
     Route::apiResource('user', UserController::class);
@@ -90,6 +96,7 @@ Route::delete('/cargo/{id}', [CargoController::class, 'destroy']);
 /* RUTAS PARA LA API SEXO */
 Route::post('/sexo', [SexoController::class, 'store']);
 Route::get('/sexo', [SexoController::class, 'index']);
+
 Route::get('/sexo/{id}', [SexoController::class, 'show']);
 Route::put('/sexo/{id}', [SexoController::class, 'update']);
 Route::delete('/sexo/{id}', [SexoController::class, 'destroy']);
@@ -117,7 +124,9 @@ Route::delete('/anioacademico/{id}', [AnioacademicoController::class, 'destroy']
 
 /* RUTAS PARA LA API TRIMESTRE*/
 Route::post('/trimestre', [TrimestreController::class, 'store']);
-Route::get('/trimestre', [TrimestreController::class, 'index']);
+Route::get('/trimestreh', [TrimestreController::class, 'index']);
+Route::get('/trimestrem', [TrimestreController::class, 'trimestrem']);
+
 Route::get('/trimestre/{id}', [TrimestreController::class, 'show']);
 Route::put('/trimestre/{id}', [TrimestreController::class, 'update']);
 Route::delete('/trimestre/{id}', [TrimestreController::class, 'destroy']);
@@ -155,14 +164,56 @@ Route::post('/estudiante', [EstudianteController::class, 'store']);
 
 Route::post('file', [EstudianteController::class, 'file']);
 Route::get('/estudiante', [EstudianteController::class, 'index']);
+Route::get('/estudiantem', [EstudianteController::class, 'index2']);
+Route::get('/estudiante2', [EstudianteController::class, 'index3']);
+
+Route::post('/estudianteH', [EstudianteController::class, 'show3']);
+Route::post('/estudianteM', [EstudianteController::class, 'show4']);
+
+
+
 Route::get('/estudiante/{id}', [EstudianteController::class, 'show']);
+Route::get('/estudiante2/{id}', [EstudianteController::class, 'show2']);
 
 /* RUTAS PARA LA API PROFESOR */
 Route::get('/profesor', [ProfesordatoController::class, 'index']);
+Route::get('/profesorm', [ProfesordatoController::class, 'profesorm']);
+
 Route::get('/profesor/{id}', [ProfesordatoController::class, 'show']);
 
 
-/* RUTAS PARA LA API */
+/* RUTAS PARA LA API ASIGNATURA*/
+Route::post('/asignatura', [AsignaturaController::class, 'store']);
+Route::get('/asignatura', [AsignaturaController::class, 'index']);
+//Route::get('/asignatura/{id}', [AsignaturaController::class, 'show']);
+Route::put('/asignatura/{id}', [AsignaturaController::class, 'update']);
+Route::delete('/asignatura/{id}', [AsignaturaController::class, 'destroy']);
+
+Route::get('/show2/{id}', [AsignaturaController::class, 'show22']);
+
+Route::get('/show23/{id}', [AsignaturaController::class, 'show23']);
+
+
+Route::post('/materia', [AsignaturaController::class, 'materia']);
+
+Route::post('/nivelasgh', [AsignaturaController::class, 'nivelasgh']);
+Route::post('/nivelasgm', [AsignaturaController::class, 'nivelasgm']);
+
+
+
+/* Route::post('/show3', [AsignaturaController::class, 'show3']);
+ */
+
+/* RUTAS PARA LA API MATRICULA */
+Route::get('/matricula', [MatriculaController::class, 'index']);
+Route::post('/matricula', [MatriculaController::class, 'store']);
+Route::post('/buscarmatricula', [MatriculaController::class, 'buscarmatricula']);
+Route::post('/buscarmatriculaH', [MatriculaController::class, 'buscarmatriculaH']);
+Route::post('/buscarmatriculaM', [MatriculaController::class, 'buscarmatriculaM']);
+Route::get('/matricula/{id}', [MatriculaController::class, 'show']);
+Route::get('/imprimirmatricula', [MatriculaController::class, 'imprimirmatricula']);
+
+
 
 /* RUTAS PARA LA API */
 

@@ -15,17 +15,35 @@ class EstudianteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $listar = Estudiante::all();
+        $listar = Estudiante::where('sex_id', 1)->get();
         return response($listar, status: 200); //ASI ES MEJOR PARA VISUALIZAR TODOS LOS DATOS EN ANGULAR
-       /*  return response()->json([
+
+
+    }
+
+    public function index2()
+    {
+        $listar = Estudiante::where('sex_id', 2)->get();
+        return response($listar, status: 200); //ASI ES MEJOR PARA VISUALIZAR TODOS LOS DATOS EN ANGULAR
+        /*     return response()->json([
             'res' => true,
             'msg' => 'Dato encontrado correctamnte',
             'data' => $listar
-        ], status: 200); */
+        ], 200); */
     }
 
+
+    public function index3()
+    {
+        $listar = Estudiante::where('sex_id', 1)->get();
+        return response()->json([
+            'res' => true,
+            'msg' => 'Dato encontrado correctamnte',
+            'data' => $listar
+        ], status: 200);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -152,15 +170,52 @@ class EstudianteController extends Controller
      */
     public function show(Estudiante $estudiante, $id)
     {
+        $prueba3 = Estudiante::find($id);
+        return response()->json($prueba3, status: 200);
+    }
+
+    public function show2(Estudiante $estudiante, $id)
+    {
         $buscar = Estudiante::find($id);
         return response()->json([
             'res' => true,
             'msg' => 'Dato encontrado correctamnte',
             'data' => $buscar
-        ], 200);
+        ], 200);   //CON ESTO NO SE PUDO VISUALIZAR EN MATRICULA
 
-      /*   $prueba3 = Sexo::find($id);
-        return response()->json($prueba3, status: 200); */
+    }
+
+    public function show3(Request $request)
+    {
+       /*  $busqueda = $request->buscar;
+        $listar = Estudiante::where('est_nombre', 'ILIKE', '%' . $busqueda . '%')
+            ->orWhere('est_apellido', 'ILIKE', '%' . $busqueda . '%')
+            ->orWhere('est_cedula', 'ILIKE', '%' . $busqueda . '%')->get()->where('sex_id', 1);
+        return response()->json([
+            'res' => true,
+            'msg' => 'Dato encontrado correctamnte',
+            'data' => $listar
+        ], status: 200); */
+
+        $listar = Estudiante::searchH($request->buscar);
+
+        return response()->json([
+            'res' => true,
+            'msg' => 'Dato encontrado correctamnte',
+            'data' => $listar
+        ], status: 200);
+    }
+
+    public function show4(Request $request)
+    {
+
+        $listar = Estudiante::searchM($request->buscar);
+
+        return response()->json([
+            'res' => true,
+            'msg' => 'Dato encontrado correctamnte',
+            'data' => $listar
+        ], status: 200);
     }
 
     public function estudianteId(Estudiante $estudiante, $id)
