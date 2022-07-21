@@ -20,12 +20,15 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             /*  'nombre' => Str::of($this->name)->upper(), */
-            'nombre' => Str::upper($this->name),
-            'correo' => $this->email,
+
+            'name' => Str::upper($this->name),
+            'email' => $this->email,
             'password' => $this->password,
             'id_rol' => $this->id_rol,
             'est_id' => Estudiante::find($this->est_id),
             'pro_id' => Profesordato::find($this->pro_id)
+
+
         /*     'created_at' => $this->created_at->format('d-m-Y H:m:s'),
             'updated_at' => $this->updated_at->format('d-m-Y H:m:s'), */
 

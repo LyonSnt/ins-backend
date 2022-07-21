@@ -13,6 +13,7 @@ use App\Http\Controllers\InstitucionController;
 use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\MesController;
 use App\Http\Controllers\NivelController;
+use App\Http\Controllers\NotaController;
 use App\Http\Controllers\ProfesordatoController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,56 +36,21 @@ use App\Models\Profesordato;
 |
 */
 
-Route::group([
-
-    'middleware' => 'api',
-    'namespace' => 'App\Http\Controllers',
-    'prefix' => 'auth'
-
-], function ($router) {
-
-    // Route::post('/login', [AuthController::class, 'login']);
-
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
-});
-
 /* RUTAS PARA LA API LOGIN */
-/* Route::get('/login', [UserController::class, 'index']);
-Route::get('/login/{user}', [UserController::class, 'show']); */
-
-
 Route::post('/login', [UserController::class, 'login']);
-
 Route::post('registro', [UserController::class, 'registro']);
-Route::post('acceso', [UserController::class, 'acceso']);
 
-Route::get('show', [UserController::class, 'show']);
-Route::get('index', [UserController::class, 'index']);
-
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('cerrarsesion', [UserController::class, 'cerrarSesion']);
-    Route::apiResource('user', UserController::class);
-
-});
-Route::get('estudianteId', [EstudianteController::class, 'estudianteId']);
+Route::get('estudianteId/{id}', [EstudianteController::class, 'estudianteId']);
 /* Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('cerrarsesion', [UserController::class, 'cerrarSesion']);
     Route::apiResource('user', UserController::class);
 }); */
 
-
-
-//Route::post('/login', [AuthController::class, 'login']);
-
 /* RUTAS PARA LA API COMUNIDAD */
-Route::post('/comunidad', [ComunidadController::class, 'store']);
+Route::post('/comunidad', [ComunidadController::class, 'create']);
 Route::get('/comunidad', [ComunidadController::class, 'index']);
+Route::put('/comunidad/{id}', [ComunidadController::class, 'update']);
 Route::delete('/comunidad/{id}', [ComunidadController::class, 'destroy']);
-
-
 
 /* RUTAS PARA LA API CARGO*/
 Route::post('/cargo', [CargoController::class, 'store']);
@@ -96,7 +62,6 @@ Route::delete('/cargo/{id}', [CargoController::class, 'destroy']);
 /* RUTAS PARA LA API SEXO */
 Route::post('/sexo', [SexoController::class, 'store']);
 Route::get('/sexo', [SexoController::class, 'index']);
-
 Route::get('/sexo/{id}', [SexoController::class, 'show']);
 Route::put('/sexo/{id}', [SexoController::class, 'update']);
 Route::delete('/sexo/{id}', [SexoController::class, 'destroy']);
@@ -126,7 +91,6 @@ Route::delete('/anioacademico/{id}', [AnioacademicoController::class, 'destroy']
 Route::post('/trimestre', [TrimestreController::class, 'store']);
 Route::get('/trimestreh', [TrimestreController::class, 'index']);
 Route::get('/trimestrem', [TrimestreController::class, 'trimestrem']);
-
 Route::get('/trimestre/{id}', [TrimestreController::class, 'show']);
 Route::put('/trimestre/{id}', [TrimestreController::class, 'update']);
 Route::delete('/trimestre/{id}', [TrimestreController::class, 'destroy']);
@@ -160,26 +124,21 @@ Route::put('/institucion/{id}', [InstitucionController::class, 'update']);
 Route::delete('/institucion/{id}', [InstitucionController::class, 'destroy']);
 
 /* RUTAS PARA LA API ESTUDIANTE*/
-Route::post('/estudiante', [EstudianteController::class, 'store']);
-
-Route::post('file', [EstudianteController::class, 'file']);
+Route::post('/estudianteH', [EstudianteController::class, 'estudianteH']);
+Route::post('/estudianteM', [EstudianteController::class, 'estudianteM']);
+Route::post('crearEstudiante', [EstudianteController::class, 'crearEstudiante']);
 Route::get('/estudiante', [EstudianteController::class, 'index']);
-Route::get('/estudiantem', [EstudianteController::class, 'index2']);
-Route::get('/estudiante2', [EstudianteController::class, 'index3']);
-
-Route::post('/estudianteH', [EstudianteController::class, 'show3']);
-Route::post('/estudianteM', [EstudianteController::class, 'show4']);
-
-
-
-Route::get('/estudiante/{id}', [EstudianteController::class, 'show']);
-Route::get('/estudiante2/{id}', [EstudianteController::class, 'show2']);
+Route::get('/ultimoDatoEstudiante', [EstudianteController::class, 'ultimoDatoEstudiante']);
+Route::get('/estudiante/{id}', [EstudianteController::class, 'estudiante']);
+Route::get('/estudiante2/{id}', [EstudianteController::class, 'estudiante2']);
+Route::put('/actualizarEstudiante/{id}', [EstudianteController::class, 'actualizarEstudiante']);
 
 /* RUTAS PARA LA API PROFESOR */
 Route::get('/profesor', [ProfesordatoController::class, 'index']);
 Route::get('/profesorm', [ProfesordatoController::class, 'profesorm']);
 
 Route::get('/profesor/{id}', [ProfesordatoController::class, 'show']);
+Route::get('/matriculaEstudiateProfesor/{id}', [ProfesordatoController::class, 'matriculaEstudiateProfesor']);
 
 
 /* RUTAS PARA LA API ASIGNATURA*/
@@ -206,16 +165,25 @@ Route::post('/nivelasgm', [AsignaturaController::class, 'nivelasgm']);
 
 /* RUTAS PARA LA API MATRICULA */
 Route::get('/matricula', [MatriculaController::class, 'index']);
-Route::post('/matricula', [MatriculaController::class, 'store']);
+Route::get('/matricula23/{id}', [MatriculaController::class, 'matricula23']);
 Route::post('/buscarmatricula', [MatriculaController::class, 'buscarmatricula']);
+Route::post('/crearMatricula', [MatriculaController::class, 'crearMatricula']);
 Route::post('/buscarmatriculaH', [MatriculaController::class, 'buscarmatriculaH']);
 Route::post('/buscarmatriculaM', [MatriculaController::class, 'buscarmatriculaM']);
-Route::get('/matricula/{id}', [MatriculaController::class, 'show']);
+Route::post('/buscarmatriculaHn', [MatriculaController::class, 'buscarmatriculaHn']);
 Route::get('/imprimirmatricula', [MatriculaController::class, 'imprimirmatricula']);
+Route::get('/matricula/{id}', [MatriculaController::class, 'show']);
+Route::get('/ultimoDatoMatricula', [MatriculaController::class, 'ultimoDatoMatricula']);
 
 
 
-/* RUTAS PARA LA API */
+/* RUTAS PARA LA API NOTA*/
+Route::get('/buscarNotaPorId/{id}', [NotaController::class, 'buscarNotaPorId']);
+Route::get('/listarNota', [NotaController::class, 'listarNota']);
+Route::get('/listarNota2/{id}/{id2}', [NotaController::class, 'listarNota2']);
+Route::put('/actualizarNota/{id}', [NotaController::class, 'actualizarNota']);
+
+
 
 /* RUTAS PARA LA API */
 

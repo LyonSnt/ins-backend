@@ -73,9 +73,18 @@ class ComunidadController extends Controller
      * @param  \App\Models\Comunidad  $comunidad
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateComunidadRequest $request, Comunidad $comunidad)
+    public function update(UpdateComunidadRequest $request, Comunidad $comunidad,$id)
     {
         //
+
+        $comunidad = Comunidad::find($id);
+        if (is_null($comunidad)) {
+            return response()->json(['message' => 'Nose encuentra el registro'], status: 404);
+        }
+        $comunidad->update($request->all());
+        //  return response($sexo, status: 200);
+        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $comunidad], status: 200);
+
     }
 
     /**

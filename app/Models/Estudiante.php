@@ -48,18 +48,29 @@ class Estudiante extends Model
     public static function searchH($query = '')
     {
         if (!$query) {
-            return self::where('sex_id', 1)->get();
+            return self::all();
             // return self::select('est_cedula', 'est_apellido')->get();
         } else {
             return self::where('est_nombre', 'ILIKE', '%' . $query . '%')
-                ->orWhere('est_apellido', 'ILIKE', '%' . $query . '%')
-                ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')
-                ->get()->where('sex_id', 1);
+            ->orWhere('est_apellido', 'ILIKE', '%' . $query . '%')
+            ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')
+            ->get();
         }
     }
 
 
     public static function searchM($query = '')
+    {
+        if (!$query) {
+            return self::all();
+        } else {
+            return self::where('est_nombre', 'ILIKE', '%' . $query . '%')
+                ->orWhere('est_apellido', 'ILIKE', '%' . $query . '%')
+                ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')
+                ->get();
+        }
+    }
+   /*  public static function searchM($query = '')
     {
         if (!$query) {
             return self::where('sex_id', 2)->get();
@@ -69,7 +80,7 @@ class Estudiante extends Model
                 ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')
                 ->get()->where('sex_id', 2);
         }
-    }
+    } */
 
     public function scopeWomen($query)
     {

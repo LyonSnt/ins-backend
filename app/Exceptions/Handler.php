@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 //use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -46,7 +47,7 @@ class Handler extends ExceptionHandler
 
 
     //QUITAR EN CASO DE DAR ERRORES
-    /*    public function render($request, Throwable $exception)
+   /*      public function render($request, Throwable $exception)
     {
         if ($exception instanceof MethodNotAllowedHttpException) {
             return redirect('/');

@@ -15,8 +15,8 @@ class CreatePruebasTable extends Migration
     {
         Schema::create('prueba', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
-            $table->string("apellido", 50);
+            $table->string('nombre')->nullable();
+            $table->string("apellido", 50)->nullable();
             $table->integer("edad")->nullable();
             $table->timestamps();
         });

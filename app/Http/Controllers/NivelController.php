@@ -54,7 +54,7 @@ class NivelController extends Controller
 
     }
 
-  
+
 
     /**
      * Show the form for editing the specified resource.
@@ -83,7 +83,6 @@ class NivelController extends Controller
         $actualizar->update($request->all());
         //  return response($sexo, status: 200);
         return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $actualizar], status: 200);
-
     }
 
     /**

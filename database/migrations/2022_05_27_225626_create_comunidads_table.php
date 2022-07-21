@@ -15,7 +15,7 @@ class CreateComunidadsTable extends Migration
     {
         Schema::create('tblcomunidad', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('com_descripcion');
+            $table->string('com_descripcion')->nullable();
             $table->timestamps();
         });
     }

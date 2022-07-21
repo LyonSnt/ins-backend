@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Profesordato;
 use App\Http\Requests\StoreProfesordatoRequest;
 use App\Http\Requests\UpdateProfesordatoRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class ProfesordatoController extends Controller
 {
@@ -34,8 +36,37 @@ class ProfesordatoController extends Controller
         return response()->json($buscar, status: 200);
     }
 
-
-
+    public function matriculaEstudiateProfesor(Request $request, $id)
+    {
+        // $busqueda = $request->buscar;
+        /*    $actualizar = Matricula::find($id);
+        if (is_null($actualizar)){
+            return response()->json(['message' => 'No se encuentra el registro'], status: 404);
+        } */
+        $listar = DB::select("SELECT m.id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
+        ani.ani_anio, au.aul_nombre, m.mtr_estado, n.niv_descripcion, t.tri_descripcion,t.id as triid,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular, a.pro_id
+        FROM tblmatricula m
+        inner join tblestudiante e
+        on m.est_id = e.id
+        inner join tblasignatura a
+        on m.asg_id = a.id
+        inner join tblmes me
+        on m.mes_id = me.id
+        inner join tblanioacademico ani
+        on m.ani_id = ani.id
+        inner join tblaula au
+        on m.aul_id = au.id
+        inner join tblnivel n
+        on a.niv_id = n.id
+        inner join tbltrimestre t
+        on a.tri_id = t.id
+        inner join tblprofesordato p
+        on a.pro_id = p.id
+        where a.pro_id = $id");
+        return response($listar, status: 200);
+        // return response()->json(['data' => $listar], status: 200);
+    }
 
 
     /**

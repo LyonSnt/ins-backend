@@ -49,9 +49,14 @@ class Matricula extends Model
         }
     }
 
-    public function estudiante()
+    public function estudianteR()
     {
-        return $this->belongsTo(\App\Models\Estudiante::class, 'est_id', 'id');
+        return $this->belongsToMany(\App\Models\Estudiante::class, 'est_id', 'id');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'roles_asignados');
     }
 
 }

@@ -14,7 +14,7 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-       /*    return [
+       /*     return [
             'name' => 'Leonel',
             'email' => 'a@a.com',
             'email_verified_at' => now(),
@@ -25,7 +25,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
         ]; */
 
-       /*  return [
+     /*    return [
             'name' => 'Cinthia',
             'email' => 'c@c.com',
             'email_verified_at' => now(),
@@ -36,7 +36,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
         ]; */
 
-          return [
+      /*     return [
             'name' => 'Alberto',
             'email' => 'al@al.com',
             'email_verified_at' => now(),
@@ -46,17 +46,17 @@ class UserFactory extends Factory
             'pro_id' => 3,
             'remember_token' => Str::random(10),
         ];
-
-      /*    return [
-            'name' => 'LUIS',
-            'email' => 'l@l.com',
+ */
+         return [
+            'name' => 'diana',
+            'email' => 'd@d.com',
             'email_verified_at' => now(),
-            'password' => bcrypt('l'),
+            'password' => bcrypt('d'),
             'id_rol' => 'Estudiante',
-            'est_id' => 1,
+            'est_id' => 2,
             'pro_id' => null,
             'remember_token' => Str::random(10),
-        ]; */
+        ];
     }
 
  /*    return [

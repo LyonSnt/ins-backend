@@ -15,7 +15,7 @@ class CreateAsistenciasTable extends Migration
     {
         Schema::create('tblasistencia', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('mtr_id');
+            $table->unsignedInteger('mtr_id')->nullable();
             $table->foreign('mtr_id', 'fk_matricula_asistencia')->references('id')->on('tblmatricula')->onDelete('cascade')->onUpdate('restrict');
             $table->enum('asi_presente', ['S', 'N']);
             $table->date('asi_fecha');

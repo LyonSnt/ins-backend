@@ -2,57 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AccesoRequest;
 use App\Http\Requests\RegistroRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 
 class UserController extends Controller
 {
-    //
-
     public function index()
     {
-        /*  $prueba3 = User::get();
-        return response()->json($prueba3, status: 200); */
         return UserResource::collection(User::all());
     }
-
-    public function show(User $user)
-    {
-        return new UserResource($user);
-    }
-
-    /*   public function store(UserRequest $request)
-    {
-        return (new UserResource(User::create($request->all())))->additional([
-            'msg' => 'Usuario registrado correctamente'])
-            ->response()
-            ->setStatusCode(2000);
-    } */
 
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
         try {
             if (!JWTAuth::attempt($credentials)) {
-                return response()->json([
-                    'status' => 0,
-                    'data' => null,
-                    'msg' => 'Email o contraseña incorrecto',
-                ], 500);
+                $response['status'] = 0;
+                $response['code'] = 401;
+                $response['error'] = 'Error';
+                $response['data'] = null;
+                $response['msg'] = 'Email o contraseña incorrecto';
+                return response()->json($response);
             }
         } catch (JWTException $e) {
-            return response()->json([
-                'data' => null,
-                'msg' => 'No puede crear el token',
-            ], 500);
+            $response['data'] = null;
+            $response['error'] = 'Error';
+            $response['code'] = 500;
+            $response['msg'] = 'No puede crear el token';
+            return response()->json($response);
         }
         $user = auth()->user();
         $data['token'] = auth()->claims([
@@ -64,12 +46,13 @@ class UserController extends Controller
             'pro_id' => $user->pro_id,
             'est_id' => $user->est_id,
         ])->attempt($credentials);
-        return response()->json([
-            'data' => $data,
-            'status' => 1,
-            'id_rol' => $user->id_rol,
-            'msg' => 'Sesion iniciado',
-        ], 200);
+        $response['data'] = $data;
+        $response['id_rol'] = $user->id_rol;
+        $response['status'] = 1;
+        $response['code'] = 200;
+        $response['msg1'] = 'Bienvenid@';
+        $response['msg2'] = 'Al Sistema';
+        return response()->json($response);
     }
 
 
@@ -94,46 +77,6 @@ class UserController extends Controller
                 'msg' => 'Error al guardar'
             ], 404);
         }
-    }
-
-
-    /*    public function acceso(AccesoRequest $request)
-    {
-        $user = User::where('email', "=", $request->email)->first();
-
-        if (isset($user)) {
-            if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken($request->email)->plainTextToken;
-                return response()->json([
-                    'msg' => 'Se inicio session',
-                    'respuesta' => true,
-                    'user' => $user,
-                    'token' => $token
-                ], 200);
-            } else {
-                return response()->json(['msg' => 'Conraseña incorrecta', 'error' => true], 200);
-            }
-        } else {
-            return response()->json(['msg' => 'Usuario no existe', 'error' => true], 200);
-        }
-    } */
-
-    public function acceso(AccesoRequest $request)
-    {
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'error' => true,
-                'msg' => 'Correo o contraseña incorrecto'
-            ], 404);
-        }
-        $token = $user->createToken($request->email)->plainTextToken;
-        return response()->json([
-            'res' => true,
-            'data' => $user,
-            'token' => $token
-        ], 200);
     }
 
     public function cerrarSesion(Request $request)
