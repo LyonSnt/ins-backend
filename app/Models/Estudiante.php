@@ -45,7 +45,51 @@ class Estudiante extends Model
         'est_imagen' => 'string'
     ];
 
-    public static function searchH($query = '')
+
+    public static function _filtrarEstudiante($query = '')
+    {
+        if (!$query) {
+            return self::all();
+            // return self::select('est_cedula', 'est_apellido')->get();
+        } else {
+            return self::where('est_nombre', 'ILIKE', '%' . $query . '%')
+            ->orWhere('est_apellido', 'ILIKE', '%' . $query . '%')
+            ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')->get();
+        }
+    }
+
+
+
+    public static function _filtrarEstudianteParaMatricular($query = '')
+    {
+        if (!$query) {
+           // return self::all();
+            return self::orderByDesc('id')->get();
+            // return self::select('est_cedula', 'est_apellido')->get();
+        } else {
+            return self::where('est_nombre', 'ILIKE', '%' . $query . '%')
+                ->orWhere('est_apellido', 'ILIKE', '%' . $query . '%')
+                ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')
+                ->orderByDesc('id')
+                ->get();
+               // ->get();
+        }
+    }
+
+    public static function _filtrarMatricularEstudiante($query = '')
+    {
+        if (!$query) {
+            return self::orderByDesc('id')->get();
+            // return self::select('est_cedula', 'est_apellido')->get();
+        } else {
+            return self::where('est_nombre', 'ILIKE', '%' . $query . '%')
+            ->orWhere('est_apellido', 'ILIKE', '%' . $query . '%')
+            ->orWhere('est_cedula', 'ILIKE', '%' . $query . '%')
+            ->get()->orderByDesc('id');
+        }
+    }
+
+    public static function searchHNOPORELMOMENTO($query = '')
     {
         if (!$query) {
             return self::all();
@@ -59,7 +103,7 @@ class Estudiante extends Model
     }
 
 
-    public static function searchM($query = '')
+    public static function searchMNOPORELMOEMNTO($query = '')
     {
         if (!$query) {
             return self::all();

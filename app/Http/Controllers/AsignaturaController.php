@@ -22,7 +22,6 @@ class AsignaturaController extends Controller
         $listar = Asignatura::where('sex_id', 1)
             ->orderBy('niv_id')->get();
         return response()->json($listar, status: 200);
-
     }
 
     /**
@@ -98,6 +97,13 @@ class AsignaturaController extends Controller
             // ->where('tri_id', $tri_id)
             ->where('sex_id', 1)->get();
         return response()->json($stateModel);
+    }
+    public function listarNivelAsignatura(Request $request)
+    {
+        $niv_id = $request->niv_id;
+        $nivelAsignatura = Asignatura::where('niv_id', $niv_id)
+            ->where('sex_id', 1)->get();
+        return response()->json($nivelAsignatura);
     }
 
     public function nivelasgm(Request $request)

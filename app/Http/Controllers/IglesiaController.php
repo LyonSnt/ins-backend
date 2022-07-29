@@ -13,7 +13,22 @@ class IglesiaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function crearIglesia(StoreIglesiaRequest $request)
+    {
+        $crearNota = new Iglesia();
+        $crearNota->igl_nombre = $request->input('igl_nombrev');
+        $crearNota->igl_direccion = $request->input('igl_direccionv');
+        $crearNota->igl_telefono = $request->input('igl_telefonov');
+        $crearNota->igl_correo = $request->input('igl_correov');
+        if ($crearNota->save()) {
+            return response()->json(['res' => true, 'msg' => 'Creado con éxito'], 201);
+        } else {
+            return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
+        }
+    }
+
+    public function listarIglesia()
     {
         $listar = Iglesia::get();
         return response()->json($listar, status: 200);
@@ -24,10 +39,6 @@ class IglesiaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,11 +46,7 @@ class IglesiaController extends Controller
      * @param  \App\Http\Requests\StoreIglesiaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreIglesiaRequest $request)
-    {
-        $crear = Iglesia::create($request->all());
-        return response()->json($crear, status: 200);
-    }
+
 
     /**
      * Display the specified resource.
@@ -47,10 +54,17 @@ class IglesiaController extends Controller
      * @param  \App\Models\Iglesia  $iglesia
      * @return \Illuminate\Http\Response
      */
-    public function show(Iglesia $iglesia, $id)
+    public function buscarIglesiaPorId(Iglesia $iglesia, $id)
     {
         $buscar = Iglesia::find($id);
-        return response()->json($buscar, status: 200);
+        if (is_null($buscar)) {
+            return response()->json(['msg' => 'No se encuentra el registro', 'success' => false], 404);
+        }
+        return response()->json([
+            'msg' => "Datos encontrados correctamente",
+            'success' => true,
+            'datol' => $buscar
+        ], 200);
     }
 
     /**
@@ -59,10 +73,6 @@ class IglesiaController extends Controller
      * @param  \App\Models\Iglesia  $iglesia
      * @return \Illuminate\Http\Response
      */
-    public function edit(Iglesia $iglesia)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -71,16 +81,19 @@ class IglesiaController extends Controller
      * @param  \App\Models\Iglesia  $iglesia
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateIglesiaRequest $request, Iglesia $iglesia, $id)
+    public function editarIglesia(UpdateIglesiaRequest $request, Iglesia $iglesia, $id)
     {
-        $actualizar = Iglesia::find($id);
-        if (is_null($actualizar)) {
-            return response()->json(['message' => 'No se encuentra el registro'], status: 404);
+        $editar = Iglesia::find($id);
+        if (is_null($editar)) {
+            return response()->json(['msg' => 'No se encuentra el registro'], status: 404);
         }
-        $actualizar->update($request->all());
+        $editar->update($request->all());
         //  return response($sexo, status: 200);
-        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $actualizar], status: 200);
-
+        return response()->json([
+            'msg' => "Actualizado correctamente",
+            'success' => true,
+            'datol' => $editar
+        ], 200);
     }
 
     /**
@@ -89,12 +102,15 @@ class IglesiaController extends Controller
      * @param  \App\Models\Iglesia  $iglesia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Iglesia $iglesia, $id)
+    public function eliminarIglesia(Iglesia $iglesia, $id)
     {
         $eliminar = Iglesia::find($id);
         $eliminar->delete();
-       // return response()->json(null, status: 204);
-       return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
-
+        // return response()->json(null, status: 204);
+        return response()->json([
+            'msg' => "Eliminado correctamente",
+            'success' => true,
+            'datol' => $eliminar
+        ], 200);
     }
 }

@@ -13,21 +13,6 @@ class InstitucionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $listar = Institucion::get();
-        return response()->json($listar, status: 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,22 +20,46 @@ class InstitucionController extends Controller
      * @param  \App\Http\Requests\StoreInstitucionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreInstitucionRequest $request)
+    public function crearInstitucion(StoreInstitucionRequest $request)
     {
-        $crear = Institucion::create($request->all());
-        return response()->json($crear, status: 200);
+        $crear = new Institucion();
+        $crear->ins_nombre = $request->input('ins_nombrev');
+        $crear->ins_direccion = $request->input('ins_direccionv');
+        $crear->ins_telefono = $request->input('ins_telefonov');
+        $crear->ins_correo = $request->input('ins_correov');
+        if ($crear->save()) {
+            return response()->json(['res' => true, 'msg' => 'Creado con éxito'], 201);
+        } else {
+            return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
+        }
     }
 
+    public function listarInstitucion()
+    {
+        $listar = Institucion::get();
+        return response()->json($listar, status: 200);
+    }
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Institucion  $institucion
      * @return \Illuminate\Http\Response
      */
-    public function show(Institucion $institucion, $id)
+    public function buscarInstitucionPorId(Institucion $institucion, $id)
     {
+        /*   $buscar = Institucion::findOrFail($id);
+        return response()->json($buscar, status: 200); */
+
         $buscar = Institucion::find($id);
         return response()->json($buscar, status: 200);
+      /*   if (is_null($buscar)) {
+            return response()->json(['msg' => 'No se encuentra el registro', 'success' => false], 404);
+        }
+        return response()->json([
+            'msg' => "Datos encontrados correctamente",
+            'success' => true,
+            'datol' => $buscar
+        ], 200); */
     }
 
     /**
@@ -59,10 +68,6 @@ class InstitucionController extends Controller
      * @param  \App\Models\Institucion  $institucion
      * @return \Illuminate\Http\Response
      */
-    public function edit(Institucion $institucion)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -71,16 +76,19 @@ class InstitucionController extends Controller
      * @param  \App\Models\Institucion  $institucion
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInstitucionRequest $request, Institucion $institucion, $id)
+    public function editarInstitucion(UpdateInstitucionRequest $request, Institucion $institucion, $id)
     {
-        $actualizar = Institucion::find($id);
-        if (is_null($actualizar)) {
-            return response()->json(['message' => 'No se encuentra el registro'], status: 404);
+        $editar = Institucion::find($id);
+        if (is_null($editar)) {
+            return response()->json(['msg' => 'No se encuentra el registro'], status: 404);
         }
-        $actualizar->update($request->all());
+        $editar->update($request->all());
         //  return response($sexo, status: 200);
-        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $actualizar], status: 200);
-
+        return response()->json([
+            'msg' => "Actualizado correctamente",
+            'success' => true,
+            'datol' => $editar
+        ], 200);
     }
 
     /**
@@ -89,12 +97,15 @@ class InstitucionController extends Controller
      * @param  \App\Models\Institucion  $institucion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Institucion $institucion, $id)
+    public function eliminarInstitucion(Institucion $institucion, $id)
     {
         $eliminar = Institucion::find($id);
         $eliminar->delete();
-       // return response()->json(null, status: 204);
-       return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
-
+        // return response()->json(null, status: 204);
+        return response()->json([
+            'msg' => "Eliminado correctamente",
+            'success' => true,
+            'datol' => $eliminar
+        ], 200);
     }
 }

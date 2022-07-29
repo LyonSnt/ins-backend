@@ -29,7 +29,7 @@ class ComunidadController extends Controller
     {
         //
 
-    $crear = Comunidad::create($request->all());
+        $crear = Comunidad::create($request->all());
         return response()->json($crear, status: 200);
     }
 
@@ -73,7 +73,7 @@ class ComunidadController extends Controller
      * @param  \App\Models\Comunidad  $comunidad
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateComunidadRequest $request, Comunidad $comunidad,$id)
+    public function update(UpdateComunidadRequest $request, Comunidad $comunidad, $id)
     {
         //
 
@@ -84,7 +84,6 @@ class ComunidadController extends Controller
         $comunidad->update($request->all());
         //  return response($sexo, status: 200);
         return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $comunidad], status: 200);
-
     }
 
     /**
@@ -95,9 +94,12 @@ class ComunidadController extends Controller
      */
     public function destroy(Comunidad $comunidad, $id)
     {
-        //
         $note = Comunidad::find($id);
         $note->delete();
-        return response()->json($note, status: 200);
+        // return response()->json('Eliminado', status: 200);
+        return response()->json([
+            'message' => "Successfully deleted",
+            'success' => true
+        ], 200);
     }
 }

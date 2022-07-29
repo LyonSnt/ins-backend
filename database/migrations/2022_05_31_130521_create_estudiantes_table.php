@@ -31,6 +31,9 @@ class CreateEstudiantesTable extends Migration
             $table->unsignedInteger('igl_id')->nullable();
             $table->foreign('igl_id', 'fk_tbliglesia_tblestudiante')->references('id')->on('tbliglesia')->onDelete('cascade')->onUpdate('restrict');
             $table->string('est_imagen');
+            $table->integer('est_nivel')->default(0);
+            $table->integer('est_trimestre')->default(0);
+            $table->integer('est_estado')->default(0);
             $table->timestamps();
         });
     }

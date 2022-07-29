@@ -13,11 +13,20 @@ class CargoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function crearCargo(StoreCargoRequest $request)
+    {
+/*         $crear = Cargo::create($request->all());
+        return response()->json($crear, status: 200); */
+        $crear = new Cargo();
+        $crear->car_descripcion = $request->input('descripcionv');  //ESTO ES CUANDO LA VARIABLE NO ES LO MISMO QUE LA DE BASE DE DATOS
+        $crear->save();
+    }
+
+    public function listarCargo()
     {
         $listar = Cargo::get();
         return response()->json($listar, status: 200);
-
     }
 
     /**
@@ -25,10 +34,7 @@ class CargoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -36,12 +42,7 @@ class CargoController extends Controller
      * @param  \App\Http\Requests\StoreCargoRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCargoRequest $request)
-    {
 
-        $crear = Cargo::create($request->all());
-        return response()->json($crear, status: 200);
-    }
 
     /**
      * Display the specified resource.
@@ -49,11 +50,18 @@ class CargoController extends Controller
      * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function show(Cargo $cargo, $id)
+    public function buscarCargoPorId(Cargo $cargo, $id)
     {
-        //
+
         $buscar = Cargo::find($id);
-        return response()->json($buscar, status: 200);
+        if (is_null($buscar)) {
+            return response()->json(['msg' => 'No se encuentra el registro', 'success' => false], 404);
+        }
+        return response()->json([
+            'msg' => "Datos encontrados correctamente",
+            'success' => true,
+            'datol' => $buscar
+        ], 200);
     }
 
     /**
@@ -62,10 +70,7 @@ class CargoController extends Controller
      * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cargo $cargo)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -74,18 +79,19 @@ class CargoController extends Controller
      * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCargoRequest $request, Cargo $cargo, $id)
+    public function editarCargo(UpdateCargoRequest $request, Cargo $cargo, $id)
     {
-        //
-
-        $cargo = Cargo::find($id);
-        if (is_null($cargo)) {
-            return response()->json(['message' => 'Nose encuentra el registro'], status: 404);
+        $editar = Cargo::find($id);
+        if (is_null($editar)) {
+            return response()->json(['msg' => 'No se encuentra el registro'], status: 404);
         }
-        $cargo->update($request->all());
+        $editar->update($request->all());
         //  return response($sexo, status: 200);
-        return response()->json(['message' => "Actualizado Correctamente", 'success' => true, $cargo], status: 200);
-
+        return response()->json([
+            'msg' => "Actualizado correctamente",
+            'success' => true,
+            'datol' => $editar
+        ], 200);
     }
 
     /**
@@ -94,12 +100,15 @@ class CargoController extends Controller
      * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cargo $cargo,$id)
+    public function eliminarCargo(Cargo $cargo, $id)
     {
         $eliminar = Cargo::find($id);
         $eliminar->delete();
-       // return response()->json(null, status: 204);
-        return response()->json(['message' => "Eliminado Correctamente",'success' => true,$eliminar], status: 204);
-
+        // return response()->json(null, status: 204);
+        return response()->json([
+            'msg' => "Eliminado correctamente",
+            'success' => true,
+            'datol' => $eliminar
+        ], 200);
     }
 }

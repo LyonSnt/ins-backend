@@ -48,7 +48,7 @@ class UserTableSeeder extends Seeder
             'pro_id' => 31,
             'remember_token' => Str::random(10),
         ]);
-        DB::table('users')->insert([
+   /*      DB::table('users')->insert([
             'name' => 'ANONYMOUSE',
             'email' => 'ae@ae.com',
             'email_verified_at' => now(),
@@ -58,7 +58,7 @@ class UserTableSeeder extends Seeder
             'pro_id' => null,
             'remember_token' => Str::random(10),
         ]);
-
+ */
          DB::table('users')->insert([
             'name' => 'ALBERTO',
             'email' => 'al@al.com',

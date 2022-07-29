@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Matricula;
 use App\Http\Requests\StoreMatriculaRequest;
+use App\Http\Requests\UpdateContadorRequest;
 use App\Http\Requests\UpdateMatriculaRequest;
+use App\Models\Contador;
+use App\Models\Estudiante;
 use Illuminate\Http\Request;
 use App\Models\Nota;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +19,170 @@ class MatriculaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function listarMatriculaLegalizar()
+    {
+        $listar = DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
+        a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado
+        FROM tblmatricula m
+        left join tblestudiante e
+        on m.est_id = e.id
+        left join tblasignatura a
+        on m.asg_id = a.id
+        left join tblmes me
+        on m.mes_id = me.id
+        left join tblanioacademico ani
+        on m.ani_id = ani.id
+        where mtr_estado = 0");
+        //  return response($listar, status: 200);
+        return response()->json($listar, status: 200);
+    }
+    public function listarMatriculaLegalizado()
+    {
+        $listar = DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
+        a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado, n.id as nivid
+        FROM tblmatricula m
+        left join tblestudiante e
+        on m.est_id = e.id
+        left join tblasignatura a
+        on m.asg_id = a.id
+        left join tblmes me
+        on m.mes_id = me.id
+        left join tblanioacademico ani
+        on m.ani_id = ani.id
+        left join tblnivel n
+		on a.niv_id = n.id
+        where mtr_estado = 1");
+        //  return response($listar, status: 200);
+        return response()->json($listar, status: 200);
+    }
+
+    public function filtrarParaMatricular(Request $request)
+    {
+        $listar = Matricula::filtrarParaMatricularPro($request->buscar);
+        return response()->json([
+            'res' => true,
+            'msg' => 'Dato encontrado correctamente',
+            'data' => $listar
+        ], status: 200);
+    }
+
+
+
+
+
+
+
+
+
+    public function buscarmatricula2(Request $request)
+    {
+        $listar = Matricula::buscarmatricula($request->buscar);
+        return response()->json([
+            'data' => $listar
+        ], status: 200);
+    }
+
+    public function listarParaMatricular()
+    {
+        $listar = DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
+        a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado, n.id as nivid
+        FROM tblmatricula m
+        left join tblestudiante e
+        on m.est_id = e.id
+        left join tblasignatura a
+        on m.asg_id = a.id
+        left join tblmes me
+        on m.mes_id = me.id
+        left join tblanioacademico ani
+        on m.ani_id = ani.id
+        left join tblnivel n
+		on a.niv_id = n.id");
+        //  return response($listar, status: 200);
+        return response()->json($listar, status: 200);
+    }
+
+    public function buscarMatriculaEstudiantePorId(Matricula $matricula, $id)
+    {
+        $buscarMatricula = DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
+        a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado,n.id as nivid
+        FROM tblmatricula m
+        left join tblestudiante e
+        on m.est_id = e.id
+        left join tblasignatura a
+        on m.asg_id = a.id
+        left join tblmes me
+        on m.mes_id = me.id
+        left join tblanioacademico ani
+        on m.ani_id = ani.id
+        left join tblnivel n
+		on a.niv_id = n.id
+        where m.id= $id");
+        return response()->json($buscarMatricula, status: 200);
+    }
+
+    public function legalizarMatricula(UpdateMatriculaRequest $request, Matricula $matricula, $id)
+    {
+        /*    $editar = Matricula::where('est_id', $id);
+        if (is_null($editar)) {
+            return response()->json(['msg' => 'No se encuentra el registro'], status: 404);
+        }
+        $editar->update($request->all());
+        //  return response($sexo, status: 200);
+        return response()->json([
+            'msg' => "Actualizado correctamente",
+            'success' => true,
+            'datol' => $editar
+        ], 200); */
+    }
+    public function legalizarMatricula2(UpdateMatriculaRequest $request, Matricula $matricula, $id)
+    {
+        $editar = Matricula::find($id);
+        if (is_null($editar)) {
+            return response()->json(['msg' => 'No se encuentra el registro'], status: 404);
+        }
+        $editar->asg_id = $request->input('asg_idv');
+        $editar->mes_id = $request->input('mes_idv');
+        $editar->ani_id = $request->input('ani_idv');
+        $editar->mtr_estado = $request->input('mtr_estadov');
+        if ($editar->save()) {
+            $crearNota = new Nota();
+            $crearNota->est_id = $request->input('idv');
+            $crearNota->mtr_id = $request->input('mtr_id');
+            $crearNota->asg_id = $request->input('asg_idv');
+            $crearNota->ani_id = $request->input('ani_idv');
+            $crearNota->save();
+            return response()->json(['res' => true, 'msg' => 'Creado con éxito'], 201);
+        } else {
+            return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
+        }
+    }
+    public function legalizarMatricula2RESPALDO(UpdateMatriculaRequest $request, Matricula $matricula, $id)
+    {
+        $editar = Matricula::find($id);
+        if (is_null($editar)) {
+            return response()->json(['msg' => 'No se encuentra el registro'], status: 404);
+        }
+        $editar->asg_id = $request->input('asg_idv');
+        $editar->mes_id = $request->input('mes_idv');
+        $editar->ani_id = $request->input('ani_idv');
+        $editar->mtr_estado = $request->input('mtr_estadov');
+        $editar->save();
+        return response()->json([
+            'msg' => "Actualizado correctamente",
+            'success' => true,
+            'datol' => $editar
+        ], 200);
+    }
+
+    public function buscarMatriculaEstudiantePorId2(Matricula $matricula, $id)
+    {
+        $buscarMatricula = Matricula::find($id);
+        return response()->json($buscarMatricula, status: 200);
+    }
+
+
+
     public function index()
     {
         $listar = Matricula::all();
@@ -23,36 +190,51 @@ class MatriculaController extends Controller
 
     }
 
-    public function matricula23(Request $request, $id)
+    public function buscarMatriculaEstudiantePorId3323(Request $request, $id)
     {
         // $busqueda = $request->buscar;
         /*    $actualizar = Matricula::find($id);
         if (is_null($actualizar)){
             return response()->json(['message' => 'No se encuentra el registro'], status: 404);
         } */
-        $listar = DB::select("SELECT m.id, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
-        ani.ani_anio, au.aul_nombre, m.mtr_estado, n.niv_descripcion, t.tri_descripcion,
-        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular
-        FROM tblmatricula m
-        inner join tblestudiante e
-        on m.est_id = e.id
-        inner join tblasignatura a
-        on m.asg_id = a.id
-        inner join tblmes me
-        on m.mes_id = me.id
-        inner join tblanioacademico ani
-        on m.ani_id = ani.id
-        inner join tblaula au
-        on m.aul_id = au.id
-        inner join tblnivel n
-        on a.niv_id = n.id
-        inner join tbltrimestre t
-        on a.tri_id = t.id
-        inner join tblprofesordato p
-        on a.pro_id = p.id
-        where e.id = $id");
-        return response($listar, status: 200);
+        $buscarEstudiante = DB::select("SELECT m.id, e.id as esid, e.est_cedula, e.est_nombre as nombre,
+        e.est_apellido, m.mtr_estado, e.est_imagen
+                FROM tblmatricula m
+                inner join tblestudiante e
+                on m.est_id = e.id
+                where e.id = $id");
+        //return response($buscarEstudiante, status: 200);
+        return response()->json($buscarEstudiante, status: 200);
+        // return response()->json(['datol' => $listar], status: 200);
         // return response()->json(['data' => $listar], status: 200);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function buscarEstudiantePorId4(Estudiante $estudiante, $id)
+    {
+        $buscarEstudiante = Estudiante::find($id);
+        return response()->json($buscarEstudiante, status: 200);
     }
 
     public function buscarmatricula(Request $request)
@@ -142,7 +324,7 @@ class MatriculaController extends Controller
     public function imprimirmatricula()
     {
         $listar = DB::select("SELECT m.id, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
-        ani.ani_anio, au.aul_nombre, m.mtr_estado, n.niv_descripcion, t.tri_descripcion
+        ani.ani_anio, m.mtr_estado, n.niv_descripcion, t.tri_descripcion
         FROM tblmatricula m
         inner join tblestudiante e
         on m.est_id = e.id
@@ -152,12 +334,10 @@ class MatriculaController extends Controller
         on m.mes_id = me.id
         inner join tblanioacademico ani
         on m.ani_id = ani.id
-        inner join tblaula au
-        on m.aul_id = au.id
         inner join tblnivel n
          on a.niv_id = n.id
         inner join tbltrimestre t
-on a.tri_id = t.id
+        on a.tri_id = t.id
         and e.sex_id = 1
         order by m.id desc LIMIT 1");
         //WHERE LastName LIKE '%ssa%'
@@ -191,20 +371,71 @@ on a.tri_id = t.id
         /*    $lastRecordDate = Matricula::all()->sortByDesc('created_at')->take(1)->toArray();
         return ['status' => true, 'message' => 'Guardado correctamente', 'dato' => $lastRecordDate]; */
     }
-    public function crearMatricula(StoreMatriculaRequest $request)
+    public function crearMatricula2(StoreMatriculaRequest $request)
     {
         $crear = Matricula::create($request->all());
-        $lastInsertedId = $crear->id;
         if ($crear) {
-           // $crearNota = Nota::create($request->all());
+            // $crearNota = Nota::create($request->all());
             $crearNota = new Nota();
             $crearNota->est_id = $request->input('est_id');
             $crearNota->mtr_id = $request->input('mtr_id');
             $crearNota->asg_id = $request->input('asg_id');
             $crearNota->ani_id = $request->input('ani_id');
-           // $crearNota->password = bcrypt($request->input('est_contra'));
             $crearNota->save();
-            return response()->json(['res' => true, 'msg' => 'Creado con éxito', 'datol' => $lastInsertedId], 201);
+            return response()->json(['res' => true, 'msg' => 'Creado con éxito'], 201);
+        } else {
+            return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
+        }
+    }
+
+    public function crearMatricula(StoreMatriculaRequest $request)
+    {
+        $crear = new Matricula();
+        $crear->est_id = $request->input('idv');
+        $crear->asg_id = $request->input('asg_idv');
+        $crear->mes_id = $request->input('mes_idv');
+        $crear->ani_id = $request->input('ani_idv');
+
+        if ($crear->save()) {
+
+            $crearNota = new Nota();
+            $crearNota->est_id = $request->input('idv');
+            $crearNota->mtr_id = $request->input('mtr_id');
+            $crearNota->asg_id = $request->input('asg_idv');
+            $crearNota->ani_id = $request->input('ani_idv');
+            $crearNota->save();
+
+            Contador::where('id', 2)
+                ->update([
+                    'con_contador' => $request->input('mtr_id')
+                ]);
+
+            return response()->json(['res' => true, 'msg' => 'Creado con éxito'], 201);
+        } else {
+            return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
+        }
+    }
+
+    public function crearMatricula46(UpdateMatriculaRequest $request, Matricula $matricula, $id)
+    {
+        $editar = Matricula::find($id);
+        if (is_null($editar)) {
+            return response()->json(['msg' => 'No se encuentra el registro'], status: 404);
+        }
+        $editar->asg_id = $request->input('asg_idv');
+        $editar->mes_id = $request->input('mes_idv');
+        $editar->ani_id = $request->input('ani_idv');
+        $editar->mtr_estado = $request->input('mtr_estadov');
+        if ($editar->save()) {
+            $crearNota = new Nota();
+            $crearNota->est_id = $request->input('idv');
+            $crearNota->mtr_id = $request->input('mtr_id');
+            $crearNota->asg_id = $request->input('asg_idv');
+            $crearNota->ani_id = $request->input('ani_idv');
+            $crearNota->save();
+
+
+            return response()->json(['res' => true, 'msg' => 'Creado con éxito'], 201);
         } else {
             return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
         }
@@ -251,8 +482,14 @@ on a.tri_id = t.id
      * @param  \App\Models\Matricula  $matricula
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Matricula $matricula)
+    public function eliminarMatricula(Matricula $matricula, $id)
     {
-        //
+        $eliminar = Matricula::find($id);
+        $eliminar->delete();
+        return response()->json([
+            'message' => "Eliminado Correctamente",
+            'success' => true,
+            'datosl' => $eliminar
+        ], 200);
     }
 }

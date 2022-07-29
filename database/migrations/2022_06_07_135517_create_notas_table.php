@@ -21,13 +21,15 @@ class CreateNotasTable extends Migration
             $table->foreign('mtr_id', 'fk_matricula_nota')->references('id')->on('tblmatricula')->onDelete('cascade')->onUpdate('restrict');
             $table->unsignedInteger('asg_id')->nullable();
             $table->foreign('asg_id', 'fk_asignatura_nota')->references('id')->on('tblasignatura')->onDelete('cascade')->onUpdate('restrict');
-            $table->unsignedInteger('prfni_id')->nullable();
+           /*  $table->unsignedInteger('prfni_id')->nullable();
             $table->foreign('prfni_id', 'fk_prfnivel_nota')->references('id')->on('tblprofesornivel')->onDelete('cascade')->onUpdate('restrict');
+ */
             $table->unsignedInteger('ani_id')->nullable();
             $table->foreign('ani_id', 'fk_aniacademico_nota')->references('id')->on('tblanioacademico')->onDelete('cascade')->onUpdate('restrict');
-            $table->string('nivel')->nullable();
+
+            /* $table->string('nivel')->nullable();
             $table->string('aula')->nullable();
-            $table->string('trimestre')->nullable();
+            $table->string('trimestre')->nullable(); */
             $table->decimal('nota1', 10, 2)->nullable();
             $table->decimal('nota2', 10, 2)->nullable();
             $table->decimal('nota3', 10, 2)->nullable();
@@ -40,7 +42,8 @@ class CreateNotasTable extends Migration
             $table->decimal('final2', 10, 2)->nullable();
             $table->decimal('final3', 10, 2)->nullable();
             $table->decimal('notafinal', 10, 2)->nullable();
-            $table->enum('aprobo', ['S', 'N'])->nullable();
+            $table->enum('aprobo', ['S', 'N'])->nullable()->default('N');
+            $table->integer('estado')->default(0);
             $table->timestamps();
         });
     }

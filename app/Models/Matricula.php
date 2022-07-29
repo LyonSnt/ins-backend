@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Matricula extends Model
 {
@@ -49,6 +50,58 @@ class Matricula extends Model
         }
     }
 
+  
+
+
+
+    public static function filtrarParaMatricularPro($query = '')
+    {
+        if (!$query) {
+            //return self::all();
+            return DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
+            a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado, n.id as nivid
+            FROM tblmatricula m
+            left join tblestudiante e
+            on m.est_id = e.id
+            left join tblasignatura a
+            on m.asg_id = a.id
+            left join tblmes me
+            on m.mes_id = me.id
+            left join tblanioacademico ani
+            on m.ani_id = ani.id
+            left join tblnivel n
+            on a.niv_id = n.id");
+        } else {
+
+            return DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
+            a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado, n.id as nivid
+            FROM tblmatricula m
+            left join tblestudiante e
+            on m.est_id = e.id
+            left join tblasignatura a
+            on m.asg_id = a.id
+            left join tblmes me
+            on m.mes_id = me.id
+            left join tblanioacademico ani
+            on m.ani_id = ani.id
+            left join tblnivel n
+            on a.niv_id = n.id
+            where e.est_nombre ILIKE '%$query%'
+            or e.est_apellido ILIKE '%$query%'
+            or e.est_cedula ILIKE '%$query%'");
+
+            /* return self::where('asg_id', 'ILIKE', '%' . $query . '%')
+                ->orWhere('ape', 'ILIKE', '%' . $query . '%')
+                ->orWhere('nombre', 'ILIKE', '%' . $query . '%')
+                ->get(); */
+        }
+    }
+
+
+
+
+
+
     public function estudianteR()
     {
         return $this->belongsToMany(\App\Models\Estudiante::class, 'est_id', 'id');
@@ -56,7 +109,6 @@ class Matricula extends Model
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class,'roles_asignados');
+        return $this->belongsToMany(Role::class, 'roles_asignados');
     }
-
 }

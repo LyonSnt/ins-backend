@@ -13,6 +13,11 @@ class NivelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function listarNivel()
+    {
+        $listar = Nivel::get();
+        return response()->json($listar, status: 200);
+    }
     public function index()
     {
         $listar = Nivel::get();

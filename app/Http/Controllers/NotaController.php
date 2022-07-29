@@ -23,33 +23,31 @@ class NotaController extends Controller
     public function buscarNotaPorId(Request $request, $id)
     {
         $listar = DB::select("SELECT nt.id, m.id, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
-        ani.ani_anio, au.aul_nombre, m.mtr_estado, n.id as nivid, n.niv_descripcion, t.tri_descripcion,
+        ani.ani_anio, m.mtr_estado, n.id as nivid, n.niv_descripcion, t.tri_descripcion,
         p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular,
         nt.nota1, nt.nota2, nt.nota3, nt.nota4,SUM(COALESCE(nt.nota1+nt.nota2+nt.nota3+nt.nota4)) as s1,
         SUM(COALESCE(nt.nota1+nt.nota2+nt.nota3+nt.nota4)/4) as promedio, nt.aprobo
         FROM tblnota nt
-        inner join tblmatricula m
+        left join tblmatricula m
         on nt.mtr_id = m.id
-        inner join tblestudiante e
+        left join tblestudiante e
         on nt.est_id = e.id
-        inner join tblasignatura a
+        left join tblasignatura a
         on nt.asg_id = a.id
-        inner join tblmes me
+        left join tblmes me
         on m.mes_id = me.id
-        inner join tblanioacademico ani
+        left join tblanioacademico ani
         on m.ani_id = ani.id
-        inner join tblaula au
-        on m.aul_id = au.id
-        inner join tblnivel n
+        left join tblnivel n
         on a.niv_id = n.id
-        inner join tbltrimestre t
+        left join tbltrimestre t
         on a.tri_id = t.id
-        inner join tblprofesordato p
+        left join tblprofesordato p
         on a.pro_id = p.id
         where e.id = $id
         group by nt.id, m.id, nombre, ape, a.asg_nombre, me.mes_nombre,
-ani.ani_anio, au.aul_nombre, m.mtr_estado, nivid, n.niv_descripcion, t.tri_descripcion,
-p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular");
+        ani.ani_anio, m.mtr_estado, nivid, n.niv_descripcion, t.tri_descripcion,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular");
         //WHERE LastName LIKE '%ssa%'
         return response($listar, status: 200);
         // return response()->json(['data' => $listar], status: 200);
@@ -58,32 +56,30 @@ p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular");
     public function listarNota(Request $request)
     {
         $listar = DB::select("SELECT nt.id as notidlav, m.id, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
-        ani.ani_anio, au.aul_nombre, m.mtr_estado, n.id as nivid, n.niv_descripcion, t.tri_descripcion,
+        ani.ani_anio, m.mtr_estado, n.id as nivid, n.niv_descripcion, t.tri_descripcion,
         p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular,
         nt.nota1, nt.nota2, nt.nota3, nt.nota4,SUM(COALESCE(nt.nota1+nt.nota2+nt.nota3+nt.nota4)) as s1,
         SUM(COALESCE(nt.nota1+nt.nota2+nt.nota3+nt.nota4)/4) as promedio, nt.aprobo
         FROM tblnota nt
-        inner join tblmatricula m
+        left join tblmatricula m
         on nt.mtr_id = m.id
-        inner join tblestudiante e
+        left join tblestudiante e
         on nt.est_id = e.id
-        inner join tblasignatura a
+        left join tblasignatura a
         on nt.asg_id = a.id
-        inner join tblmes me
+        left join tblmes me
         on m.mes_id = me.id
-        inner join tblanioacademico ani
+        left join tblanioacademico ani
         on m.ani_id = ani.id
-        inner join tblaula au
-        on m.aul_id = au.id
-        inner join tblnivel n
+        left join tblnivel n
         on a.niv_id = n.id
-        inner join tbltrimestre t
+        left join tbltrimestre t
         on a.tri_id = t.id
-        inner join tblprofesordato p
+        left join tblprofesordato p
         on a.pro_id = p.id
         group by nt.id, m.id, nombre, ape, a.asg_nombre, me.mes_nombre,
-ani.ani_anio, au.aul_nombre, m.mtr_estado, nivid, n.niv_descripcion, t.tri_descripcion,
-p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular");
+        ani.ani_anio, m.mtr_estado, nivid, n.niv_descripcion, t.tri_descripcion,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular");
         //WHERE LastName LIKE '%ssa%'
         return response($listar, status: 200);
         // return response()->json(['data' => $listar], status: 200);
@@ -91,34 +87,32 @@ p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular");
     public function listarNota2(Request $request, $id, $id2)
     {
         $listar = DB::select("SELECT nt.id as notidlav, m.id, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
-        ani.ani_anio, au.aul_nombre, m.mtr_estado, n.id as nivid, n.niv_descripcion, t.tri_descripcion, t.id as triid,
+        ani.ani_anio, m.mtr_estado, n.id as nivid, n.niv_descripcion, t.tri_descripcion, t.id as triid,
         p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular,
         nt.nota1, nt.nota2, nt.nota3, nt.nota4,SUM(COALESCE(nt.nota1+nt.nota2+nt.nota3+nt.nota4)) as s1,
         SUM(COALESCE(nt.nota1+nt.nota2+nt.nota3+nt.nota4)/4) as promedio, nt.aprobo
         FROM tblnota nt
-        inner join tblmatricula m
+        left join tblmatricula m
         on nt.mtr_id = m.id
-        inner join tblestudiante e
+        left join tblestudiante e
         on nt.est_id = e.id
-        inner join tblasignatura a
+        left join tblasignatura a
         on nt.asg_id = a.id
-        inner join tblmes me
+        left join tblmes me
         on m.mes_id = me.id
-        inner join tblanioacademico ani
+        left join tblanioacademico ani
         on m.ani_id = ani.id
-        inner join tblaula au
-        on m.aul_id = au.id
-        inner join tblnivel n
+        left join tblnivel n
         on a.niv_id = n.id
-        inner join tbltrimestre t
+        left join tbltrimestre t
         on a.tri_id = t.id
-        inner join tblprofesordato p
+        left join tblprofesordato p
         on a.pro_id = p.id
         where n.id = $id
         and t.id = $id2
         group by nt.id, m.id, t.id,nombre, ape, a.asg_nombre, me.mes_nombre,
-ani.ani_anio, au.aul_nombre, m.mtr_estado, nivid, n.niv_descripcion, t.tri_descripcion,
-p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular");
+        ani.ani_anio, m.mtr_estado, nivid, n.niv_descripcion, t.tri_descripcion,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular");
         //WHERE LastName LIKE '%ssa%'
         return response($listar, status: 200);
         // return response()->json(['data' => $listar], status: 200);
