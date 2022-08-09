@@ -15,7 +15,7 @@ class CreateTrimestresTable extends Migration
     {
         Schema::create('tbltrimestre', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('tri_descripcion');
+            $table->string('tri_descripcion')->unique();
             $table->timestamps();
         });
     }

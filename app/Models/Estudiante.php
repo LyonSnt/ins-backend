@@ -22,7 +22,10 @@ class Estudiante extends Model
         'est_celular',
         'est_direccion',
         'igl_id',
-        'est_imagen'
+        'est_imagen',
+        'est_nivel',
+        'est_trimestre',
+        'est_estado',
     ];
 
     /**
@@ -42,7 +45,10 @@ class Estudiante extends Model
         'est_celular' => 'string',
         'est_direccion' => 'string',
         'igl_id' => 'integer',
-        'est_imagen' => 'string'
+        'est_imagen' => 'string',
+        'est_nivel' => 'integer',
+        'est_trimestre' => 'integer',
+        'est_estado' => 'integer',
     ];
 
 

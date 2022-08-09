@@ -15,7 +15,7 @@ class CreateAulasTable extends Migration
     {
         Schema::create('tblaula', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('aul_nombre');
+            $table->string('aul_nombre')->unique();
             $table->timestamps();
         });
     }

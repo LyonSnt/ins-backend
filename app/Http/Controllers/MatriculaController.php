@@ -22,37 +22,74 @@ class MatriculaController extends Controller
 
     public function listarMatriculaLegalizar()
     {
-        $listar = DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
-        a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado
+        $listar = DB::select("SELECT m.id, e.id as idest, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
+        ani.ani_anio, m.mtr_estado, n.niv_descripcion, t.tri_descripcion,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular
         FROM tblmatricula m
-        left join tblestudiante e
+        inner join tblestudiante e
         on m.est_id = e.id
-        left join tblasignatura a
+        inner join tblasignatura a
         on m.asg_id = a.id
-        left join tblmes me
+        inner join tblmes me
         on m.mes_id = me.id
-        left join tblanioacademico ani
+        inner join tblanioacademico ani
         on m.ani_id = ani.id
-        where mtr_estado = 0");
+        inner join tblnivel n
+        on a.niv_id = n.id
+        inner join tbltrimestre t
+        on a.tri_id = t.id
+        inner join tblprofesordato p
+        on a.pro_id = p.id
+        where mtr_estado = 1");
         //  return response($listar, status: 200);
         return response()->json($listar, status: 200);
     }
     public function listarMatriculaLegalizado()
     {
-        $listar = DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
-        a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado, n.id as nivid
+        $listar = DB::select("SELECT m.id, e.id as idest, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
+        ani.ani_anio, m.mtr_estado, n.niv_descripcion, t.tri_descripcion,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular
         FROM tblmatricula m
-        left join tblestudiante e
+        inner join tblestudiante e
         on m.est_id = e.id
-        left join tblasignatura a
+        inner join tblasignatura a
         on m.asg_id = a.id
-        left join tblmes me
+        inner join tblmes me
         on m.mes_id = me.id
-        left join tblanioacademico ani
+        inner join tblanioacademico ani
         on m.ani_id = ani.id
-        left join tblnivel n
-		on a.niv_id = n.id
+        inner join tblnivel n
+        on a.niv_id = n.id
+        inner join tbltrimestre t
+        on a.tri_id = t.id
+        inner join tblprofesordato p
+        on a.pro_id = p.id
         where mtr_estado = 1");
+        //  return response($listar, status: 200);
+        return response()->json($listar, status: 200);
+    }
+    public function listarMatriculaLegalizadoId(Request $request, $id)
+    {
+        $listar = DB::select("SELECT m.id, e.id as idest, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
+        ani.ani_anio, m.mtr_estado, n.niv_descripcion, t.tri_descripcion,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular
+        FROM tblmatricula m
+        inner join tblestudiante e
+        on m.est_id = e.id
+        inner join tblasignatura a
+        on m.asg_id = a.id
+        inner join tblmes me
+        on m.mes_id = me.id
+        inner join tblanioacademico ani
+        on m.ani_id = ani.id
+        inner join tblnivel n
+        on a.niv_id = n.id
+        inner join tbltrimestre t
+        on a.tri_id = t.id
+        inner join tblprofesordato p
+        on a.pro_id = p.id
+        where a.niv_id = $id
+        and mtr_estado = 1");
         //  return response($listar, status: 200);
         return response()->json($listar, status: 200);
     }
@@ -69,7 +106,23 @@ class MatriculaController extends Controller
 
 
 
+    public function matriculados()
+    {
+        /*   $listar = Estudiante::where('sex_id', 1)->get(); */
+        $listar = Matricula::where('mtr_estado', 1)->count();
 
+        return response($listar, status: 200); //ASI ES MEJOR PARA VISUALIZAR TODOS LOS DATOS EN ANGULAR
+
+    }
+
+    public function matriculasAnuladas()
+    {
+        /*   $listar = Estudiante::where('sex_id', 1)->get(); */
+        $listar = Matricula::where('mtr_estado', 2)->count();
+
+        return response($listar, status: 200); //ASI ES MEJOR PARA VISUALIZAR TODOS LOS DATOS EN ANGULAR
+
+    }
 
 
 
@@ -85,40 +138,102 @@ class MatriculaController extends Controller
 
     public function listarParaMatricular()
     {
-        $listar = DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
-        a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado, n.id as nivid
+        $listar = DB::select("SELECT m.id, e.id as idest, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
+        ani.ani_anio, m.mtr_estado, n.niv_descripcion, t.tri_descripcion,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular
         FROM tblmatricula m
-        left join tblestudiante e
+        inner join tblestudiante e
         on m.est_id = e.id
-        left join tblasignatura a
+        inner join tblasignatura a
         on m.asg_id = a.id
-        left join tblmes me
+        inner join tblmes me
         on m.mes_id = me.id
-        left join tblanioacademico ani
+        inner join tblanioacademico ani
         on m.ani_id = ani.id
-        left join tblnivel n
-		on a.niv_id = n.id");
+        inner join tblnivel n
+        on a.niv_id = n.id
+        inner join tbltrimestre t
+        on a.tri_id = t.id
+        inner join tblprofesordato p
+        on a.pro_id = p.id");
         //  return response($listar, status: 200);
         return response()->json($listar, status: 200);
     }
 
     public function buscarMatriculaEstudiantePorId(Matricula $matricula, $id)
     {
-        $buscarMatricula = DB::select("SELECT m.id, e.id as idest, m.asg_id, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape,
-        a.asg_nombre, m.mes_id, me.mes_nombre, m.ani_id, ani.ani_anio, m.mtr_estado,n.id as nivid
+        $buscarMatricula = DB::select("SELECT m.id, m.asg_id, e.id as idest, e.est_cedula, e.est_nombre as nombre, e.est_apellido as ape, a.asg_nombre, me.mes_nombre,
+        ani.ani_anio, m.mtr_estado, n.niv_descripcion, t.tri_descripcion,
+        p.pro_nombre, p.pro_apellido, p.pro_imagen, p.pro_celular
         FROM tblmatricula m
-        left join tblestudiante e
+        inner join tblestudiante e
         on m.est_id = e.id
-        left join tblasignatura a
+        inner join tblasignatura a
         on m.asg_id = a.id
-        left join tblmes me
+        inner join tblmes me
         on m.mes_id = me.id
-        left join tblanioacademico ani
+        inner join tblanioacademico ani
         on m.ani_id = ani.id
-        left join tblnivel n
-		on a.niv_id = n.id
+        inner join tblnivel n
+        on a.niv_id = n.id
+        inner join tbltrimestre t
+        on a.tri_id = t.id
+        inner join tblprofesordato p
+        on a.pro_id = p.id
         where m.id= $id");
         return response()->json($buscarMatricula, status: 200);
+    }
+
+    public function crearMatricula(StoreMatriculaRequest $request)
+    {
+
+        $estid = $request->input('idv');
+        $asgid = $request->input('asg_idv');
+
+        $existencia = Matricula::where('est_id', $estid)
+            ->where('asg_id', $asgid)->first();
+
+        if ($existencia == null) {
+            $crear = new Matricula();
+            $crear->est_id = $request->input('idv');
+            $crear->asg_id = $request->input('asg_idv');
+            $crear->mes_id = $request->input('mes_idv');
+            $crear->ani_id = $request->input('ani_idv');
+
+            if ($crear->save()) {
+
+                $crearNota = new Nota();
+                $crearNota->est_id = $request->input('idv');
+                $crearNota->mtr_id = $request->input('mtr_id');
+                $crearNota->asg_id = $request->input('asg_idv');
+                $crearNota->ani_id = $request->input('ani_idv');
+                $crearNota->save();
+
+                Contador::where('id', 2)
+                    ->update([
+                        'con_contador' => $request->input('mtr_id')
+                    ]);
+
+                Estudiante::where('id', $request->input('idv'))
+                    ->update([
+                        'est_estado' => 1 //ESTA MATRICULADO
+                    ]);
+                $response['datol'] = $crear;
+                $response['status'] = 1;
+                $response['code'] = 200;
+                $response['msg1'] = 'Guardado';
+                $response['msg2'] = 'Correctamente';
+                return response()->json($response);
+            } else {
+                return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
+            }
+        } else {
+            $response['status'] = 0;
+            $response['code'] = 401;
+            $response['data'] = null;
+            $response['msg'] = 'Materia Aprobado';
+            return response()->json($response);
+        }
     }
 
     public function legalizarMatricula(UpdateMatriculaRequest $request, Matricula $matricula, $id)
@@ -135,6 +250,31 @@ class MatriculaController extends Controller
             'datol' => $editar
         ], 200); */
     }
+
+
+    public function anularMatricula(UpdateMatriculaRequest $request, Matricula $matricula, $id)
+    {
+        $editar = Matricula::find($id);
+        if (is_null($editar)) {
+            return response()->json(['msg' => 'No se encuentra el registro'], status: 404);
+        }
+        $editar->mtr_estado = 2; //ANULADO
+        Nota::where('mtr_id', $request->input('idv'))
+            ->update([
+                'estado' => 2 //ANULADO
+            ]);
+        Estudiante::where('id', $request->input('idestv'))
+            ->update([
+                'est_estado' => 2 //ANULADO
+            ]);
+
+        if ($editar->save()) {
+            return response()->json(['res' => true, 'msg' => 'Actualizado con éxito'], 200);
+        } else {
+            return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
+        }
+    }
+
     public function legalizarMatricula2(UpdateMatriculaRequest $request, Matricula $matricula, $id)
     {
         $editar = Matricula::find($id);
@@ -338,7 +478,7 @@ class MatriculaController extends Controller
          on a.niv_id = n.id
         inner join tbltrimestre t
         on a.tri_id = t.id
-        and e.sex_id = 1
+        /* and e.sex_id = 1 */
         order by m.id desc LIMIT 1");
         //WHERE LastName LIKE '%ssa%'
 
@@ -388,33 +528,7 @@ class MatriculaController extends Controller
         }
     }
 
-    public function crearMatricula(StoreMatriculaRequest $request)
-    {
-        $crear = new Matricula();
-        $crear->est_id = $request->input('idv');
-        $crear->asg_id = $request->input('asg_idv');
-        $crear->mes_id = $request->input('mes_idv');
-        $crear->ani_id = $request->input('ani_idv');
 
-        if ($crear->save()) {
-
-            $crearNota = new Nota();
-            $crearNota->est_id = $request->input('idv');
-            $crearNota->mtr_id = $request->input('mtr_id');
-            $crearNota->asg_id = $request->input('asg_idv');
-            $crearNota->ani_id = $request->input('ani_idv');
-            $crearNota->save();
-
-            Contador::where('id', 2)
-                ->update([
-                    'con_contador' => $request->input('mtr_id')
-                ]);
-
-            return response()->json(['res' => true, 'msg' => 'Creado con éxito'], 201);
-        } else {
-            return response()->json(['res' => true, 'msg' => 'Error al crear'], 500);
-        }
-    }
 
     public function crearMatricula46(UpdateMatriculaRequest $request, Matricula $matricula, $id)
     {

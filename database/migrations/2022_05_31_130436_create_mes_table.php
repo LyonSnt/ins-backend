@@ -15,8 +15,8 @@ class CreateMesTable extends Migration
     {
         Schema::create('tblmes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('mes_nombre', 50);
-            $table->char('mes_abreviatura', 3);
+            $table->string('mes_nombre', 50)->unique();
+            $table->char('mes_abreviatura', 3)->unique();
             $table->timestamps();
         });
     }

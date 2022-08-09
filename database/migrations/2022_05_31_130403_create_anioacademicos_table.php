@@ -15,7 +15,7 @@ class CreateAnioacademicosTable extends Migration
     {
         Schema::create('tblanioacademico', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('ani_anio');
+            $table->string('ani_anio')->unique();
             $table->timestamps();
         });
     }

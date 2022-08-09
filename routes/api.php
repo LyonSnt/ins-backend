@@ -77,53 +77,39 @@ Route::post('/filtrarEstudiante', [EstudianteController::class, 'filtrarEstudian
 Route::get('/buscarEstudiantePorId/{id}', [EstudianteController::class, 'buscarEstudiantePorId']);
 Route::put('/actualizarEstudiante/{id}', [EstudianteController::class, 'actualizarEstudiante']);
 Route::delete('/eliminarEstudiante/{id}', [EstudianteController::class, 'eliminarEstudiante']);
-
-
-
 Route::post('/filtrarMatricularEstudiante', [EstudianteController::class, 'filtrarMatricularEstudiante']);
-/* Route::post('/estudianteH', [EstudianteController::class, 'estudianteH']);
-Route::post('/estudianteM', [EstudianteController::class, 'estudianteM']); */
-
 Route::get('/estudiante', [EstudianteController::class, 'index']);
 Route::get('/ultimoDatoEstudiante', [EstudianteController::class, 'ultimoDatoEstudiante']);
 Route::get('/estudiante/{id}', [EstudianteController::class, 'estudiante']);
 Route::get('/estudiante2/{id}', [EstudianteController::class, 'estudiante2']);
-
-
-
 Route::get('estudianteId/{id}', [EstudianteController::class, 'estudianteId']);
-/* Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('cerrarsesion', [UserController::class, 'cerrarSesion']);
-    Route::apiResource('user', UserController::class);
-}); */
+
+
 
 
 /* RUTAS PARA LA API MATRICULA */
-
 Route::get('/listarMatriculaLegalizar', [MatriculaController::class, 'listarMatriculaLegalizar']);
 Route::put('/legalizarMatricula/{id}', [MatriculaController::class, 'legalizarMatricula']);
 Route::get('/listarMatriculaLegalizado', [MatriculaController::class, 'listarMatriculaLegalizado']);
 Route::post('/filtrarEstudianteParaMatricular', [EstudianteController::class, 'filtrarEstudianteParaMatricular']);
-
-
-
-
-
-
+Route::put('/anularMatricula/{id}', [MatriculaController::class, 'anularMatricula']);
 Route::post('/filtrarParaMatricular', [MatriculaController::class, 'filtrarParaMatricular']);
-
 Route::get('/listarParaMatricular', [MatriculaController::class, 'listarParaMatricular']);
-
 Route::put('/legalizarMatricula2/{id}', [MatriculaController::class, 'legalizarMatricula2']);
-
-Route::get('/buscarMatriculaPorId/{id}', [MatriculaController::class, 'buscarMatriculaPorId']);
+Route::get('/buscarMatriculaPorId/{id}', [MatriculaController::class, 'buscarMatriculaPorId']);//?
 Route::get('/buscarMatriculaEstudiantePorId/{id}', [MatriculaController::class, 'buscarMatriculaEstudiantePorId']);
-
-
+Route::get('/buscarMatriculaEstudiantePorId/{id}', [MatriculaController::class, 'buscarMatriculaEstudiantePorId']);
+Route::get('/listarMatriculaLegalizadoId/{id}', [MatriculaController::class, 'listarMatriculaLegalizadoId']);
 Route::get('/matricula', [MatriculaController::class, 'index']);
+
+
+
+
+
 
 Route::get('/listarContadorEstudiante', [ContadorController::class, 'listarContadorEstudiante']);
 Route::get('/listarContadorMatricula', [ContadorController::class, 'listarContadorMatricula']);
+Route::get('/listarContadorProfesor', [ContadorController::class, 'listarContadorProfesor']);
 
 
 Route::get('/matricula23/{id}', [MatriculaController::class, 'matricula23']);
@@ -136,7 +122,6 @@ Route::get('/imprimirmatricula', [MatriculaController::class, 'imprimirmatricula
 Route::get('/matricula/{id}', [MatriculaController::class, 'show']);
 Route::get('/ultimoDatoMatricula', [MatriculaController::class, 'ultimoDatoMatricula']);
 Route::delete('/eliminarMatricula/{id}', [MatriculaController::class, 'eliminarMatricula']);
-
 
 
 
@@ -190,9 +175,6 @@ Route::get('/estadocivil/{id}', [EstadocivilController::class, 'show']);
 Route::put('/estadocivil/{id}', [EstadocivilController::class, 'update']);
 Route::delete('/estadocivil/{id}', [EstadocivilController::class, 'destroy']);
 
-
-
-
 /* RUTAS PARA LA API TRIMESTRE*/
 Route::post('/trimestre', [TrimestreController::class, 'store']);
 Route::get('/trimestreh', [TrimestreController::class, 'index']);
@@ -216,15 +198,11 @@ Route::put('/mes/{id}', [MesController::class, 'update']);
 Route::delete('/mes/{id}', [MesController::class, 'destroy']);
 
 
-
-
-
-
 /* RUTAS PARA LA API PROFESOR */
-Route::get('/profesor', [ProfesordatoController::class, 'index']);
-Route::get('/profesorm', [ProfesordatoController::class, 'profesorm']);
-
+Route::post('/crearProfesor', [ProfesordatoController::class, 'crearProfesor']);
+Route::post('/filtrarProfesor', [ProfesordatoController::class, 'filtrarProfesor']);
 Route::get('/profesor/{id}', [ProfesordatoController::class, 'show']);
+
 Route::get('/matriculaEstudiateProfesor/{id}', [ProfesordatoController::class, 'matriculaEstudiateProfesor']);
 
 
@@ -252,7 +230,11 @@ Route::post('/listarNivelAsignatura', [AsignaturaController::class, 'listarNivel
  */
 
 
-
+/* RUTAS PARA LA API REPORTES*/
+Route::get('/historialEstudiante', [EstudianteController::class, 'historialEstudiante']);
+Route::get('/matriculados', [MatriculaController::class, 'matriculados']);
+Route::get('/historialProfesores', [ProfesordatoController::class, 'historialProfesores']);
+Route::get('/matriculasAnuladas', [MatriculaController::class, 'matriculasAnuladas']);
 
 
 /* RUTAS PARA LA API */

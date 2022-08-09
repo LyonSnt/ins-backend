@@ -23,6 +23,11 @@ class ContadorController extends Controller
         $listar = Contador::where('id', 2)->get();
         return response()->json($listar, status: 200);
     }
+    public function listarContadorProfesor()
+    {
+        $listar = Contador::where('id', 3)->get();
+        return response()->json($listar, status: 200);
+    }
 
     /**
      * Show the form for creating a new resource.

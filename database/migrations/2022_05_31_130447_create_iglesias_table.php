@@ -15,10 +15,10 @@ class CreateIglesiasTable extends Migration
     {
         Schema::create('tbliglesia', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('igl_nombre');
+            $table->string('igl_nombre')->unique();
             $table->string('igl_direccion');
             $table->string('igl_telefono');
-            $table->string('igl_correo');
+            $table->string('igl_correo')->unique();
             $table->timestamps();
         });
     }

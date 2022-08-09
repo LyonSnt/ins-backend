@@ -16,7 +16,7 @@ class CreateContadorsTable extends Migration
         Schema::create('tblcontador', function (Blueprint $table) {
             $table->increments('id');
             $table->string('con_descripcion')->nullable();
-            $table->integer('con_contador')->default(1);
+            $table->integer('con_contador')->default(0);
             $table->timestamps();
         });
     }

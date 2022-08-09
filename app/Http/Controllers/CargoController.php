@@ -16,11 +16,26 @@ class CargoController extends Controller
 
     public function crearCargo(StoreCargoRequest $request)
     {
-/*         $crear = Cargo::create($request->all());
-        return response()->json($crear, status: 200); */
-        $crear = new Cargo();
-        $crear->car_descripcion = $request->input('descripcionv');  //ESTO ES CUANDO LA VARIABLE NO ES LO MISMO QUE LA DE BASE DE DATOS
-        $crear->save();
+        $descripcionc = $request->input('descripcionv');
+        $existencia = Cargo::where('car_descripcion', $descripcionc)->first();
+        // dd($existencia);
+        if ($existencia == null) {
+            $crear = new Cargo();
+            $crear->car_descripcion = $request->input('descripcionv');  //ESTO ES CUANDO LA VARIABLE NO ES LO MISMO QUE LA DE BASE DE DATOS
+            $crear->save();
+            $response['datol'] = $crear;
+            $response['status'] = 1;
+            $response['code'] = 200;
+            $response['msg1'] = 'Guardado';
+            $response['msg2'] = 'Correctamente';
+            return response()->json($response);
+        } else {
+            $response['status'] = 0;
+            $response['code'] = 401;
+            $response['data'] = null;
+            $response['msg'] = 'Registro duplicado';
+            return response()->json($response);
+        }
     }
 
     public function listarCargo()

@@ -21,44 +21,63 @@ class EstudianteController extends Controller
 
     public function crearEstudiante(Request $request)
     {
-        $crea2 = new Estudiante();
 
-        if ($request->hasFile('est_imagen')) {
+        $cedula = $request->input('est_cedula');
+        $existencia = Estudiante::where('est_cedula', $cedula)->first();
 
-            $completeFilename = $request->file('est_imagen')->getClientOriginalName();
-            $fileNameOnly = pathinfo($completeFilename, PATHINFO_FILENAME);
-            $extenshion = $request->file('est_imagen')->getClientOriginalExtension();
-            $compic = str_replace(' ', '_', $fileNameOnly) . '-' . rand() . '_' . time() . '.' . $extenshion;
-            $path = $request->file('est_imagen')->storeAs('public/hoy10', $compic);
-            $crea2->est_imagen = $compic;
-            $crea2->est_cedula = $request->input('est_cedula');
-            $crea2->est_apellido = $request->input('est_apellido');
-            $crea2->est_nombre = $request->input('est_nombre');
-            $crea2->sex_id = $request->input('sex_id');
-            $crea2->esc_id = $request->input('esc_id');
-            $crea2->est_fechanacimiento = $request->input('est_fechanacimiento');
-            $crea2->est_fechabautismo = $request->input('est_fechabautismo');
-            $crea2->est_celular = $request->input('est_celular');
-            $crea2->est_direccion = $request->input('est_direccion');
-            $crea2->igl_id = $request->input('igl_id');
+        if ($existencia == null) {
+            $crea2 = new Estudiante();
 
-            if ($crea2->save()) {
-                $crearUsuario = new User();
-                $crearUsuario->name = $request->input('est_nombre');
-                $crearUsuario->email = $request->input('est_correo');
-                $crearUsuario->id_rol = $request->input('est_rol');
-                $crearUsuario->est_id = $request->input('usuario_id');
-                $crearUsuario->password = bcrypt($request->input('est_contra'));
-                $crearUsuario->save();
+            if ($request->hasFile('est_imagen')) {
+                $completeFilename = $request->file('est_imagen')->getClientOriginalName();
+                $fileNameOnly = pathinfo($completeFilename, PATHINFO_FILENAME);
+                $extenshion = $request->file('est_imagen')->getClientOriginalExtension();
+                $compic = str_replace(' ', '_', $fileNameOnly) . '-' . rand() . '_' . time() . '.' . $extenshion;
+                $path = $request->file('est_imagen')->storeAs('public/img_estudiante', $compic);
+                $crea2->est_imagen = $compic;
+                $crea2->est_cedula = $request->input('est_cedula');
+                $crea2->est_apellido = $request->input('est_apellido');
+                $crea2->est_nombre = $request->input('est_nombre');
+                $crea2->sex_id = $request->input('sex_id');
+                $crea2->esc_id = $request->input('esc_id');
+                $crea2->est_fechanacimiento = $request->input('est_fechanacimiento');
+                $crea2->est_fechabautismo = $request->input('est_fechabautismo');
+                $crea2->est_celular = $request->input('est_celular');
+                $crea2->est_direccion = $request->input('est_direccion');
+                $crea2->igl_id = $request->input('igl_id');
 
-                Contador::where('id', 1)
-                ->update([
-                    'con_contador' => $request->input('usuario_id')
-                ]);
-                return ['status' => true, 'message' => 'Guardado correctamente'];
-            } else {
-                return ['status' => false, 'message' => 'Error al guardar'];
+                if ($crea2->save()) {
+                    $crearUsuario = new User();
+                    $crearUsuario->name = $request->input('est_nombre');
+                    $crearUsuario->email = $request->input('est_correo');
+                    $crearUsuario->id_rol = $request->input('est_rol');
+                    $crearUsuario->est_id = $request->input('usuario_id');
+                    $crearUsuario->password = bcrypt($request->input('est_contra'));
+                    $crearUsuario->save();
+
+                    Contador::where('id', 1)
+                        ->update([
+                            'con_contador' => $request->input('usuario_id')
+                        ]);
+
+                    $response['datol'] = $crea2;
+                    $response['status'] = 1;
+                    $response['code'] = 200;
+                    $response['msg1'] = 'Guardado';
+                    $response['msg2'] = 'Correctamente';
+                    return response()->json($response);
+
+                    //return ['status' => true, 'message' => 'Guardado correctamente'];
+                } else {
+                    return ['status' => false, 'message' => 'Error al guardar'];
+                }
             }
+        } else {
+            $response['status'] = 0;
+            $response['code'] = 401;
+            $response['data'] = null;
+            $response['msg'] = 'Cédula Duplicado';
+            return response()->json($response);
         }
     }
 
@@ -119,6 +138,20 @@ class EstudianteController extends Controller
             'success' => true,
             'datosl' => $eliminar
         ], 200);
+    }
+
+
+    public function historialEstudiante()
+    {
+        /*   $listar = Estudiante::where('sex_id', 1)->get(); */
+        $listar = Estudiante::count();
+        /*      return response()->json([
+            'message' => "Cantidad de estudiantes",
+            'success' => true,
+            'datosl' => $listar
+        ], 200); */
+        return response($listar, status: 200); //ASI ES MEJOR PARA VISUALIZAR TODOS LOS DATOS EN ANGULAR
+
     }
 
     /* HASTA AQUI LOS METOS ESTAN BIEN */

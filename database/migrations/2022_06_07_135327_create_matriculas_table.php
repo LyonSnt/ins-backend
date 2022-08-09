@@ -25,7 +25,8 @@ class CreateMatriculasTable extends Migration
             $table->foreign('ani_id', 'fk_aniacademico_matricula')->references('id')->on('tblanioacademico')->onDelete('cascade')->onUpdate('restrict');
             /* $table->unsignedInteger('aul_id')->nullable();
             $table->foreign('aul_id', 'fk_aula_matricula')->references('id')->on('tblaula')->onDelete('cascade')->onUpdate('restrict'); */
-            $table->integer('mtr_estado')->default(0);
+            $table->integer('mtr_estado')->default(1);
+            $table->unique( array('est_id','asg_id', 'mes_id') );
             $table->timestamps();
         });
     }

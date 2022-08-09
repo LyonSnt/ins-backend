@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Profesordato;
 use App\Http\Requests\StoreProfesordatoRequest;
 use App\Http\Requests\UpdateProfesordatoRequest;
+use App\Models\Contador;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -15,6 +17,87 @@ class ProfesordatoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function crearProfesor(Request $request)
+    {
+        $cedula = $request->input('pro_cedula');
+        $existencia = Profesordato::where('pro_cedula', $cedula)->first();
+
+        if ($existencia == null) {
+            $crea2 = new Profesordato();
+
+            if ($request->hasFile('pro_imagen')) {
+
+                $completeFilename = $request->file('pro_imagen')->getClientOriginalName();
+                $fileNameOnly = pathinfo($completeFilename, PATHINFO_FILENAME);
+                $extenshion = $request->file('pro_imagen')->getClientOriginalExtension();
+                $compic = str_replace(' ', '_', $fileNameOnly) . '-' . rand() . '_' . time() . '.' . $extenshion;
+                $path = $request->file('pro_imagen')->storeAs('public/img_profesor', $compic);
+                $crea2->pro_imagen = $compic;
+                $crea2->pro_cedula = $request->input('pro_cedula');
+                $crea2->pro_apellido = $request->input('pro_apellido');
+                $crea2->pro_nombre = $request->input('pro_nombre');
+                $crea2->sex_id = $request->input('sex_id');
+                $crea2->esc_id = $request->input('esc_id');
+                $crea2->pro_fechanacimiento = $request->input('pro_fechanacimiento');
+                $crea2->pro_fechabautismo = $request->input('pro_fechabautismo');
+                $crea2->pro_celular = $request->input('pro_celular');
+                $crea2->pro_direccion = $request->input('pro_direccion');
+                $crea2->igl_id = $request->input('igl_id');
+
+                if ($crea2->save()) {
+                    $crearUsuario = new User();
+                    $crearUsuario->name = $request->input('pro_nombre');
+                    $crearUsuario->email = $request->input('pro_correo');
+                    $crearUsuario->id_rol = $request->input('pro_rol');
+                    $crearUsuario->pro_id = $request->input('usuario_id');
+                    $crearUsuario->password = bcrypt($request->input('pro_contra'));
+                    $crearUsuario->save();
+
+                    Contador::where('id', 3)
+                        ->update([
+                            'con_contador' => $request->input('usuario_id')
+                        ]);
+
+                    $response['datol'] = $crea2;
+                    $response['status'] = 1;
+                    $response['code'] = 200;
+                    $response['msg1'] = 'Guardado';
+                    $response['msg2'] = 'Correctamente';
+                    return response()->json($response);
+                } else {
+                    return ['status' => false, 'message' => 'Error al guardar'];
+                }
+            }
+        } else {
+            $response['status'] = 0;
+            $response['code'] = 401;
+            $response['data'] = null;
+            $response['msg'] = 'Cédula Duplicado';
+            return response()->json($response);
+        }
+    }
+
+    public function filtrarProfesor(Request $request)
+    {
+        $listar = Profesordato::_filtrarProfesor($request->buscar);
+        return response()->json([
+            'res' => true,
+            'msg' => 'Dato encontrado correctamente',
+            'datol' => $listar
+        ], status: 200);
+    }
+
+
+    public function historialProfesores()
+    {
+        /*   $listar = Estudiante::where('sex_id', 1)->get(); */
+        $listar = Profesordato::count();
+
+        return response($listar, status: 200); //ASI ES MEJOR PARA VISUALIZAR TODOS LOS DATOS EN ANGULAR
+
+    }
+
     public function index()
     {
         /* $listar = Profesordato::get();

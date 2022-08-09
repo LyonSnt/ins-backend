@@ -44,4 +44,18 @@ class Profesordato extends Model
         'igl_id' => 'integer',
         'pro_imagen' => 'string'
     ];
+
+
+    public static function _filtrarProfesor($query = '')
+    {
+        if (!$query) {
+            return self::all();
+            // return self::select('est_cedula', 'est_apellido')->get();
+        } else {
+            return self::where('pro_nombre', 'ILIKE', '%' . $query . '%')
+            ->orWhere('pro_apellido', 'ILIKE', '%' . $query . '%')
+            ->orWhere('pro_cedula', 'ILIKE', '%' . $query . '%')->get();
+        }
+    }
+
 }

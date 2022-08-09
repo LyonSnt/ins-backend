@@ -43,7 +43,7 @@ class CreateNotasTable extends Migration
             $table->decimal('final3', 10, 2)->nullable();
             $table->decimal('notafinal', 10, 2)->nullable();
             $table->enum('aprobo', ['S', 'N'])->nullable()->default('N');
-            $table->integer('estado')->default(0);
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }
